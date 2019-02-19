@@ -10,12 +10,7 @@ if defined?(Spree::Frontend)
 
     def create
       @address = spree_current_user.addresses.build(address_params)
-      if @address.save
-        flash[:notice] = I18n.t(:successfully_created, scope: :address_book)
-        redirect_to account_path
-      else
-        render :action => 'new'
-      end
+      
     end
 
     def show
@@ -32,30 +27,24 @@ if defined?(Spree::Frontend)
 
     def update
       if @address.editable?
-        if @address.update_attributes(address_params)
-          flash[:notice] = I18n.t(:successfully_updated, scope: :address_book)
-          redirect_back_or_default(account_path)
-        else
-          render :action => 'edit'
-        end
+        @address_status = @address.update_attributes(address_params)
       else
         new_address = @address.clone
         new_address.attributes = address_params
         @address.update_attribute(:deleted_at, Time.now)
-        if new_address.save
-          flash[:notice] = I18n.t(:successfully_updated, scope: :address_book)
-          redirect_back_or_default(account_path)
-        else
-          render :action => 'edit'
-        end
+        @address_status = new_address.save
       end
     end
 
     def destroy
-      @address.destroy
 
-      flash[:notice] = I18n.t(:successfully_removed, scope: :address_book)
-      redirect_to(request.env['HTTP_REFERER'] || account_path) unless request.xhr?
+      is_primary = (spree_current_user.shipping_address.try(:id) || spree_current_user.billing_address.try(:id) ) == @address.id 
+
+      if is_primary 
+        @address.errors.add(:alert, "Primary Address Can't be deleted");
+      else
+        @address.destroy
+      end
     end
 
     private
@@ -65,8 +54,9 @@ if defined?(Spree::Frontend)
                                 :lastname,
                                 :address1,
                                 :address2,
+                                :address3,
                                 :city,
-                                :state_id,
+                                :state_name,
                                 :zipcode,
                                 :country_id,
                                 :phone
