@@ -5,6 +5,8 @@ if defined?(Spree::Frontend)
     after_action :normalize_addresses, :only => :update
     before_action :set_addresses, :only => :update
 
+    
+
     protected
 
     def set_addresses

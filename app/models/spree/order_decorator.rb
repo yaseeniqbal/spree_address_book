@@ -72,6 +72,7 @@ Spree::Order.class_eval do
   end
 
   def update_or_create_address(attributes = {})
+
     return if attributes.blank?
     attributes = attributes.select{|k,v| v.present?}
 

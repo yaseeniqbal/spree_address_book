@@ -1,5 +1,5 @@
 (Spree::PermittedAttributes.class_variable_get("@@address_attributes") << [
-  :user_id, :deleted_at
+  :user_id, :deleted_at,:address3
 ]).flatten!
 
 

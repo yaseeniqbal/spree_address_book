@@ -1,7 +1,6 @@
 if defined?(Spree::Frontend)
   class Spree::AddressesController < Spree::StoreController
     helper Spree::AddressesHelper
-    rescue_from ActiveRecord::RecordNotFound, with: :render_404
     load_and_authorize_resource class: Spree::Address
 
     def index
@@ -9,6 +8,7 @@ if defined?(Spree::Frontend)
     end
 
     def create
+
       @address = spree_current_user.addresses.build(address_params)
       
     end
@@ -31,6 +31,7 @@ if defined?(Spree::Frontend)
       else
         new_address = @address.clone
         new_address.attributes = address_params
+        new_address.user = @address.user
         @address.update_attribute(:deleted_at, Time.now)
         @address_status = new_address.save
       end
