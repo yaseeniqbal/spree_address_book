@@ -8,8 +8,9 @@ if defined?(Spree::Frontend)
     end
 
     def create
-
+      
       @address = spree_current_user.addresses.build(address_params)
+      @address.state_name  = params[:address][:state_name]
       
     end
 
@@ -26,6 +27,7 @@ if defined?(Spree::Frontend)
     end
 
     def update
+      @address.state_id  = params[:address][:state_id]
       if @address.editable?
         @address_status = @address.update_attributes(address_params)
       else
@@ -57,7 +59,6 @@ if defined?(Spree::Frontend)
                                 :address2,
                                 :address3,
                                 :city,
-                                :state_name,
                                 :zipcode,
                                 :country_id,
                                 :phone
