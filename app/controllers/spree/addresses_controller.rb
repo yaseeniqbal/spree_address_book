@@ -8,7 +8,6 @@ if defined?(Spree::Frontend)
     end
 
     def create
-      
       @address = spree_current_user.addresses.build(address_params)
       @address.state_name  = params[:address][:state_name]
       
