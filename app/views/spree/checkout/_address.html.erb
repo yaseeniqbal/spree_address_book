@@ -1,3 +1,5 @@
+<div class=" alert  alert-dismissible" id="address-info-sec"></div>
+
 <% @addresses = spree_current_user ? spree_current_user.addresses : [] %>
 <div class="row">
   <% ['billing', 'shipping'].each do |address_type|
@@ -25,12 +27,22 @@
                 <label><%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == spree_current_user["#{address_name}_id"] || idx == 0) %> <%= address.to_s.html_safe %></label> <a href="<%= edit_address_path(address) %>" data-hook="edit_address"><%#= Spree.t(:edit) %></a><br />
               </span>
               <% end %>
-              <!-- <label><%#= form.radio_button "#{address_name}_id", 0 %> <%#= t('other_address', :scope => :address_book) %></label> -->
+              <!-- <label><%#= form.radio_button "#{address_name}_id", 0 %> Add Address</label> -->
+              <% if address_type == "billing" && spree_current_user.present? %>
+                <button type="button" class="btn btn-primary" id="cart-address-popup-opner">Add Address</button>
+                <div id="checkout-address-sec">
+                  <%#= yield :checkout_address_form %>
+                </div>
+              <% end %>
+              </div>
             </p>
           </div>
           <% else%>
+
+          
             <%= form.fields_for address_name do |address_form| %>
-              <div class="inner" data-hook=<%="#{address_type}_inner" %>>
+              <div class="inner" data-hook=<%="#{address_type}_inner" %>
+                <% address_form.object = Spree::Address.new %>
                 <%= render :partial => 'spree/addresses/form', :locals => {
                   :address_name => address_name,
                   :address_form => address_form,
@@ -49,3 +61,15 @@
 <div class="well text-right form-buttons" data-hook="buttons">
   <%= submit_tag Spree.t(:save_and_continue), :class => 'btn btn-lg btn-success' %>
 </div>
+
+<script type="text/javascript">
+  
+
+  $(function() {
+    $("#cart-address-popup-opner").on('click',function(){
+      let abc = "<%= j render partial: 'spree/account_management/address/single_address', locals: {form_obj: Spree::Address.new, url_name: addresses_path(spree_current_user), method_name: "post",user: spree_current_user, from_view: "address-checkout"} %>"
+      $('.bl-popup-body').html(abc);
+      $('#bl_popup').modal('show');
+  });
+});
+</script>
