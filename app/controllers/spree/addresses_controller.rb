@@ -9,8 +9,10 @@ if defined?(Spree::Frontend)
 
     def create
       @address = spree_current_user.addresses.build(address_params)
-      @address.state_name  = params[:address][:state_name]
-      
+      @address.state_id = params[:address][:state_id]
+      state_name = Spree::State.find(@address.state_id).name
+      @address.state_name = state_name
+
     end
 
     def show
