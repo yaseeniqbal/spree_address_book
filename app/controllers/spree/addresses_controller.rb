@@ -1,5 +1,8 @@
 if defined?(Spree::Frontend)
   class Spree::AddressesController < Spree::StoreController
+
+    skip_before_action :verify_authenticity_token
+
     helper Spree::AddressesHelper
     load_and_authorize_resource class: Spree::Address
 

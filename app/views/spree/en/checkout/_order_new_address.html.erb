@@ -1,0 +1,61 @@
+<div class="sip-box hide new_<%= address_type %>_address">
+  <h3 class="heading3 sip-title"><%#= Spree.t(address_type + "_address") %></h3>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 xp-1a">
+
+    <%= form_for Spree::Address.new , html: { novalidate: true, class: "needs-validation news_frm manage-frm-box new_#{address_type}_address_form" } ,remote: true do |address_form| %>
+
+      <div class="form-row news_frm manage-frm-box manage-frm-box-final">
+
+        <% address_form.object = Spree::Address.new %>
+
+        <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook="<%=address_type%>_inner">
+          <% address_name = address_name = "#{address_type[0...4]}_address" %>
+          <%= render partial: 'spree/en/checkout/single_address_form', locals: {
+            :address_name => address_name,
+            :address_form => address_form,
+            :address_type => address_type,
+            :address      => Spree::Address.new
+          } %>
+          
+        </div>
+        
+        <div class="clearfix"></div>
+        <div class="form-row">
+          <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+            <div class="elit-dd text-center manag-input btn-full-wt"> 
+              <button type="reset" class="ress-btn-delete cancle_<%= address_type %>_address_btn">CANCEL</button>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+            <div class="elit-dd text-center manag-input btn-full-wt"> 
+              <%#= address_form.submit "ADD ADDRESS",class: "ress-btn-save" %>
+              <button class="ress-btn-save cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end%>
+
+
+
+  </div>
+  <div class="clearfix"></div>
+  <div class="dvd tab-mrg address-dvd"></div>
+  <div class="clearfix"></div>
+</div>
+
+<script type="text/javascript">
+  $('.cancle_billing_address_btn').click(function(){
+    $("#new-billing-address-form").html("")
+    $('.billing_address_table').show();
+    });
+
+
+    $('.cancle_shipping_address_btn').click(function(){
+    $("#new-shipping-address-form").html("")
+    $('.shipping_address_table').show();
+    });
+</script>
+
+

@@ -16,7 +16,6 @@
 
         
         <div class="panel-body">
-
           <% if address_type == 'shipping' && !Spree::AddressBook::Config[:disable_bill_address] %>
             <p class="field checkbox"  data-hook="use_billing">
               <%= label_tag :order_use_billing, :id => 'use_billing' do %>
@@ -25,26 +24,23 @@
               <% end %>
             </p>
           <% end %>
-          
           <% if @addresses.present? %>
-          
-            <div class="select_address">
-              <p class="form-group">
-                <% @addresses.each_with_index do |address, idx| %>
-                <span id="<%= [address_type, dom_id(address)].join('_') %>">
-                  <label><%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == spree_current_user["#{address_name}_id"] || idx == 0) %> <%= address.to_s.html_safe %></label> <a href="<%= edit_address_path(address) %>" data-hook="edit_address"><%#= Spree.t(:edit) %></a><br />
-                </span>
-                <% end %>
-                <!-- <label><%#= form.radio_button "#{address_name}_id", 0 %> Add Address</label> -->
-                <% if address_type == "billing" && spree_current_user.present? %>
-                  <button type="button" class="btn btn-primary" id="cart-address-popup-opner">Add Address</button>
-                  <div id="checkout-address-sec">
-                    <%#= yield :checkout_address_form %>
-                  </div>
-                <% end %>
-              </p>
-            </div>
-          
+          <div class="select_address">
+            <p class="form-group">
+              <% @addresses.each_with_index do |address, idx| %>
+              <span id="<%= [address_type, dom_id(address)].join('_') %>">
+                <label><%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == spree_current_user["#{address_name}_id"] || idx == 0) %> <%= address.to_s.html_safe %></label> <a href="<%= edit_address_path(address) %>" data-hook="edit_address"><%#= Spree.t(:edit) %></a><br />
+              </span>
+              <% end %>
+              <!-- <label><%#= form.radio_button "#{address_name}_id", 0 %> Add Address</label> -->
+              <% if address_type == "billing" && spree_current_user.present? %>
+                <button type="button" class="btn btn-primary" id="cart-address-popup-opner">Add Address</button>
+                <div id="checkout-address-sec">
+                  <%#= yield :checkout_address_form %>
+                </div>
+              <% end %>
+            </p>
+          </div>
           <% else%>
 
           
