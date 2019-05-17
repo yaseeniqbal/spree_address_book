@@ -2,7 +2,7 @@
 <% @addresses = spree_current_user ? spree_current_user.addresses : [] %>
 
 
-<% ['billing', 'shipping'].each do |address_type|
+<% ['shipping','billing'].each do |address_type|
 
   next if address_type == 'billing' && Spree::AddressBook::Config[:disable_bill_address]
   address_name = "#{address_type[0...4]}_address" %>
@@ -10,10 +10,10 @@
 
   <div class="sip-box " data-hook="<%= address_type %>_fieldset_wrapper">
 
-    <% if address_type == 'shipping' && !Spree::AddressBook::Config[:disable_bill_address] %>
+    <% if address_type == 'billing' && !Spree::AddressBook::Config[:disable_bill_address] %>
       <div class="prime-tp-btn billing-add-sm" >
         <ul>
-          <li>Shipping Address Same as Billing Address</li>
+          <li>Billing Address Same as Shipping Address</li>
           <li data-hook="use_billing">
             
             <%= label_tag :order_use_billing, :id => 'shipp_address_check', class: "switch" do %>
@@ -26,9 +26,11 @@
       </div>
     <% end %>
 
-    <div class="nun-ut <%= (address_type == "shipping") ? 'ship_address' : ""%>" style="<%= (address_type == "shipping") ?  'display: none;' : "" %>">
+    <div class="nun-ut <%= (address_type == "billing") ? 'bill_address' : ""%>" style="<%= (address_type == "billing") ?  'display: none;' : "" %>">
 
-      <h3 class="heading3 sip-title"><%= Spree.t(address_type + "_address") %></h3>
+      <% if address_type == "shipping" %>
+        <h3 class="heading3 sip-title"><%= Spree.t(address_type + "_address").upcase %></h3>
+      <% end %>
 
       <% if @addresses.present? %>
 
@@ -84,7 +86,22 @@
                 } %>
                 
               </div>
-              
+
+              <!-- <div class="clearfix"></div>
+              <div class="form-row">
+                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                  <div class="elit-dd text-center manag-input btn-full-wt"> 
+                    <button type="reset" class="ress-btn-delete cancle_<%= address_type %>_address_btn">CANCEL</button>
+                  </div>
+                </div>
+                <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+                  <div class="elit-dd text-center manag-input btn-full-wt"> 
+                    <%#= address_form.submit "ADD ADDRESS",class: "ress-btn-save" %>
+                    <button class="ress-btn-save cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
+                  </div>
+                </div>
+              </div> -->
+        
             <% end %>
 
           </div>

@@ -24,7 +24,7 @@
 
 
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3" id=<%="#{address_id}firstname" %> >
-      <label for="validationCustom01"><%=  address_form.object.persisted? ? ex_contact_name.try(:title) : new_contact_name.try(:title)  %></label>
+      <label for="validationCustom01"><%#=  address_form.object.persisted? ? ex_contact_name.try(:title) : new_contact_name.try(:title)  %>First Name</label>
       <%= address_form.text_field :firstname, class: 'form-control', id: "validationCustom01", required: true%>
     </div>        
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
@@ -32,7 +32,7 @@
       <input type="text" class="form-control" id="validationCustom01" placeholder="" required>
     </div>                    
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3" id=<%="#{address_id}address1" %>>
-      <label for="validationCustom02"><%= address_form.object.persisted? ? ex_contact_address1.try(:title)  : new_contact_address1.try(:title) %> </label>
+      <label for="validationCustom02"><%#= address_form.object.persisted? ? ex_contact_address1.try(:title)  : new_contact_address1.try(:title) %>Street Address Line </label>
       <%= address_form.text_field :address1, class: 'form-control', id: "validationCustom02",  required: true  %> 
     </div>
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 plc-gry-col" id=<%="#{address_id}address2" %>>
@@ -44,22 +44,23 @@
       <%= address_form.text_field :address3, class: 'form-control', id: "validationCustom03" %>  
     </div>
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 plc-gry-col" id=<%="#{address_id}phone" %>>
-      <label for="validationCustom02"><%= address_form.object.persisted? ? ex_contact_number.try(:title)  : new_contact_number.try(:title) %></label>
+      <label for="validationCustom02">Phone Number<%#= address_form.object.persisted? ? ex_contact_number.try(:title)  : new_contact_number.try(:title) %></label>
       <%= address_form.number_field :phone, class: 'form-control',id: "validationCustom02", required: true %>
     </div>  
+    
     
     
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}country" %>>
       <label class="transp" for="validationCustom02"></label>
       <span id=<%="#{address_id}country-selection" %>>
-        <%= address_form.collection_select :country_id, available_countries, :id, :name, {:selected => address_form.object.country_id.present? ? address_form.object.country_id : Spree::Config.default_country_id}, { class: 'form-control country-select-dp', required: true } %>
+        <%= address_form.collection_select :country_id, available_countries, :id, :name, {:prompt => "Please Select Your Country" }, { class: 'form-control country-select-dp', required: true} %>
       </span>
-    </div>
-
+    </div> 
+    
     <% address.country.present? ? address.country : (address.country_id = Spree::Config.default_country_id) %>
     <% if Spree::Config[:address_requires_state] %>
       <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}state" %>>
-        <label for="">State/Province</label>
+        <label class="transp" for="validationCustom02"></label>
           <% have_states = !address.country.states.empty? %>
           <%#= address_form.label :state do %>
             <!-- <%#= Spree.t(:state) %><abbr class='required' title="required" id=<%#="#{address_id}state-required"%>>*</abbr> -->
@@ -68,7 +69,7 @@
           <%== state_elements = [
              address_form.collection_select(:state_id, address.country.states,
                                 :id, :name,
-                                {include_blank: true, :prompt => "Please Select the State"},
+                                {include_blank: true, :prompt => "Please Select Your Emirate"},
                                 {class: have_states ? 'form-control' : 'form-control hidden',
                                 required: have_states,
                                 disabled: !have_states}) +
@@ -86,9 +87,11 @@
 
 
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 plc-gry-col" id=<%="#{address_id}city" %>>
-      <label for="validationCustom02"><%= address_form.object.persisted? ? ex_contact_town.try(:title) : new_contact_town.try(:title) %></label>
+      <label for="validationCustom02">Please Enter Your City<%#= address_form.object.persisted? ? ex_contact_town.try(:title) : new_contact_town.try(:title) %></label>
       <%= address_form.text_field :city, class: 'form-control', id: "validationCustom02", required: true  %> 
-    </div>  
+    </div> 
+
+    
 
 
 <% end %>

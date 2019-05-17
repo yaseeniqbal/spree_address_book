@@ -10,7 +10,7 @@
         <% address_form.object = Spree::Address.new %>
 
         <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook="<%=address_type%>_inner">
-          <% address_name = address_name = "#{address_type[0...4]}_address" %>
+          <% address_name = "#{address_type[0...4]}_address" %>
           <%= render partial: 'spree/en/checkout/single_address_form', locals: {
             :address_name => address_name,
             :address_form => address_form,
