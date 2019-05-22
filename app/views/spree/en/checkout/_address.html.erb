@@ -75,7 +75,10 @@
 
         <div class="sip-box new_<%= address_type %>_address">
           <div class="col-lg-12 col-md-12 col-sm-12 xp-1a">
-            <%= form.fields_for address_name , html: { novalidate: true, class: "needs-validation news_frm manage-frm-box new_address", remote: true }  do |address_form| %>
+
+            <form></form>
+            <%= form_for Spree::Address.new , html: { novalidate: true, class: "needs-validation news_frm manage-frm-box new_#{address_type}_address_form" } ,remote: true do |address_form| %>
+
               <% address_form.object = Spree::Address.new %>
               <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook=<%="#{address_type}_inner" %>>
                 <%= render partial: 'spree/en/checkout/single_address_form', locals: {
@@ -87,7 +90,7 @@
                 
               </div>
 
-              <!-- <div class="clearfix"></div>
+              <div class="clearfix"></div>
               <div class="form-row">
                 <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
                   <div class="elit-dd text-center manag-input btn-full-wt"> 
@@ -100,7 +103,7 @@
                     <button class="ress-btn-save cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
                   </div>
                 </div>
-              </div> -->
+              </div>
         
             <% end %>
 
@@ -177,15 +180,8 @@
         },
 
         error: function(request, status, error) {
-         
           $("#loading-gif").addClass("hide");
-          $('#js-messages').html("<a href='#'' class='close' data-dismiss='alert' aria-label='close'>&times;</a><p>Some thing went wrong.Please fill all the required information and try again.</p>")
-          $('#js-messages').addClass("alert-danger")
-          $('#js-messages').removeClass('hide alert-success')
-          $('html, body').animate({
-            scrollTop: $("#js-messages").offset().top
-          }, 2000);
-
+          toastr.error("Some thing went wrong.Please fill all the required information and try again.")
         }
       });
       event.preventDefault();
