@@ -55,6 +55,14 @@ Spree::Address.class_eval do
     ].reject(&:blank?).map{ |attribute| ERB::Util.html_escape(attribute) }.join('<br/>')
   end
 
+   def complete_address_info
+    [
+      address1,
+      "#{city.truncate(7)}, #{state.name}",
+      country.to_s
+    ].reject(&:blank?).map{ |attribute| ERB::Util.html_escape(attribute) }.join('<br/>')
+  end
+
   # UPGRADE_CHECK if future versions of spree have a custom destroy function, this will break
   def destroy
     if can_be_deleted?

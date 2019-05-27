@@ -53,7 +53,11 @@
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}country" %>>
       <label class="transp" for="validationCustom02"></label>
       <span id=<%="#{address_id}country-selection" %>>
-        <%= address_form.collection_select :country_id, available_countries, :id, :name, {:prompt => "Please Select Your Country" }, { class: 'form-control country-select-dp', required: true} %>
+
+        <% default_country = Spree::Country.where(name: "United Arab Emirates").last %>
+        <%= address_form.collection_select :country_id, default_country.present? ? [default_country] : available_countries , :id, :name, {:prompt => true,selected: 1 }, { class: 'form-control country-select-dp', required: true} %>
+
+
       </span>
     </div> 
     
