@@ -12,6 +12,7 @@ if defined?(Spree::Frontend)
 
     def create
       @address = spree_current_user.addresses.build(address_params)
+      @address.city = @address.suburb.name
       @address.state_id = params[:address][:state_id]
       state_name = Spree::State.find(@address.state_id).name
       @address.state_name = state_name
@@ -45,9 +46,9 @@ if defined?(Spree::Frontend)
 
     def destroy
 
-      is_primary = (spree_current_user.shipping_address.try(:id) || spree_current_user.billing_address.try(:id) ) == @address.id 
+      is_primary = (spree_current_user.shipping_address.try(:id) || spree_current_user.billing_address.try(:id) ) == @address.id
 
-      if is_primary 
+      if is_primary
         @address.errors.add(:alert, "Primary Address Can't be deleted");
       else
         @address.destroy
@@ -65,7 +66,8 @@ if defined?(Spree::Frontend)
                                 :city,
                                 :zipcode,
                                 :country_id,
-                                :phone
+                                :phone,
+                                :suburb_id
                                )
       end
   end

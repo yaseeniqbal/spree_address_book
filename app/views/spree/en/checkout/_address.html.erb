@@ -15,7 +15,7 @@
         <ul>
           <li>Billing Address Same as Shipping Address</li>
           <li data-hook="use_billing">
-            
+
             <%= label_tag :order_use_billing, :id => 'shipp_address_check', class: "switch" do %>
               <%= check_box_tag 'order[use_billing]', '1', @order.shipping_eq_billing_address? %>
               <span class="slider round"></span>
@@ -34,7 +34,7 @@
 
       <% if @addresses.present? %>
 
-        <% empty_address = Spree::Address.new %>
+        <% empty_address = Spree::Address.new country_id:Spree::Config.default_country_id %>
         <% addresses = @addresses + [empty_address] %>
 
         <% addresses.in_groups_of(3).each  do |grouped_address_col| %>
@@ -61,7 +61,7 @@
                     </td>
 
                   <% end %>
-                  
+
                 <% end %>
 
               </tr>
@@ -79,7 +79,7 @@
             <form></form>
             <%= form_for Spree::Address.new , html: { novalidate: true, class: "needs-validation news_frm manage-frm-box new_#{address_type}_address_form" } ,remote: true do |address_form| %>
 
-              <% address_form.object = Spree::Address.new %>
+              <% address_form.object = @order.ship_address %>
               <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook=<%="#{address_type}_inner" %>>
                 <%= render partial: 'spree/en/checkout/single_address_form', locals: {
                   :address_name => address_name,
@@ -87,24 +87,24 @@
                   :address_type => address_type,
                   :address      => Spree::Address.new
                 } %>
-                
+
               </div>
 
               <div class="clearfix"></div>
               <div class="form-row">
                 <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
-                  <div class="elit-dd text-center manag-input btn-full-wt"> 
+                  <div class="elit-dd text-center manag-input btn-full-wt">
                     <button type="reset" class="ress-btn-delete cancle_<%= address_type %>_address_btn">CANCEL</button>
                   </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
-                  <div class="elit-dd text-center manag-input btn-full-wt"> 
+                  <div class="elit-dd text-center manag-input btn-full-wt">
                     <%#= address_form.submit "ADD ADDRESS",class: "ress-btn-save" %>
                     <button class="ress-btn-save cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
                   </div>
                 </div>
               </div>
-        
+
             <% end %>
 
           </div>
@@ -131,12 +131,12 @@
           <td class="sip-adrs-btn manag-input">
             <button class = "ress-btn-save add_address_btn">ADD ADDRESS</button>
           </td>
-          <td>       
+          <td>
           </td>
         </tr>
       </tbody>
     </table> -->
-    
+
   </div>
 <% end %>
 
@@ -146,7 +146,7 @@
 </div>
  -->
 <!-- <script type="text/javascript">
-  
+
 
   $(function() {
     $("#cart-address-popup-opner").on('click',function(){
