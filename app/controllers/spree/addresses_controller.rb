@@ -32,7 +32,11 @@ if defined?(Spree::Frontend)
     end
 
     def update
+
       @address.state_id  = params[:address][:state_id]
+      city_name          = @address.state.suburbs.where(id: params[:address][:suburb_id]).last.name
+      @address.city      = city_name
+
       if @address.editable?
         @address_status = @address.update_attributes(address_params)
       else

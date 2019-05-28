@@ -1,0 +1,93 @@
+<% if address_type == "shipping" %>
+  <h3 class="heading3 sip-title"><%= Spree.t(address_type + "_address").upcase %></h3>
+<% end %>
+
+<% if addresses.present? %>
+
+  <% user = spree_current_user %>
+  <% user_shipping_address = user.present? && user.shipping_address.present? ? user.shipping_address.id  : "" %>
+  <% user_billing_address  = user.present? && user.billing_address.present? ?  user.billing_address.id: "" %>
+  <% primary_address     = addresses.select{|s| ( user_shipping_address || user_billing_address  ) == s.id}.last%>
+  <% secondry_addresses  = addresses.reject{|s| ( user_shipping_address || user_billing_address  ) == s.id} %>
+
+  <% if primary_address.present? %>
+    <% secondry_addresses.insert(0,primary_address) %>
+  <% end %>
+
+  <% empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
+  <% addresses = secondry_addresses + [empty_address] %>
+  <table class="table tower-table tower-table-f1 <%=address_type%>_address_table" id="<%= address_type %>" data-hook>
+    <tbody>
+      <% addresses.in_groups_of(3).each  do |grouped_address_col| %>
+        <tr>
+          <% grouped_address_col.reject(&:nil?).each_with_index do |address, idx| %>
+            <% if address.present? %>
+              <td>
+                <span id="<%= [address_type, dom_id(address)].join('_') %>">
+                  <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id) %>
+                </span>
+                <ul class="sin-st">
+                  <li class="body3"><%= address.try(:firstname).titleize%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>
+                </ul>
+              </td>
+            <% else %>
+
+              <td class="sip-adrs-btn manag-input">
+                <!-- <button class="ress-btn-save <%=address_type%>_add_address_btn" id="cart-address-popup-opner">ADD ADDRESS</button> -->
+                <br>
+                <button type="button"  data-address-type= "<%=address_type%>" class="ress-btn-save add_<%= address_type%>_address_btn">ADD ADDRESS</button>
+                <br>
+                <br>
+
+              </td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+
+
+<% else%>
+
+  <div class="sip-box new_<%= address_type %>_address">
+    <div class="col-lg-12 col-md-12 col-sm-12 xp-1a">
+
+      <form></form>
+      <%= form_for Spree::Address.new , html: { novalidate: true, class: "needs-validation news_frm manage-frm-box new_#{address_type}_address_form" } ,remote: true do |address_form| %>
+
+        <% address_form.object = @order.ship_address %>
+        <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook=<%="#{address_type}_inner" %>>
+          <%= render partial: 'spree/en/checkout/single_address_form', locals: {
+            :address_name => address_name,
+            :address_form => address_form,
+            :address_type => address_type,
+            :address      => Spree::Address.new
+          } %>
+
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-row">
+          <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+            <div class="elit-dd text-center manag-input btn-full-wt">
+              <button type="reset" class="ress-btn-delete cancle_<%= address_type %>_address_btn">CANCEL</button>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
+            <div class="elit-dd text-center manag-input btn-full-wt">
+              <%#= address_form.submit "ADD ADDRESS",class: "ress-btn-save" %>
+              <button class="ress-btn-save cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
+            </div>
+          </div>
+        </div>
+
+      <% end %>
+
+    </div>
+    <div class="clearfix"></div>
+    <div class="dvd tab-mrg address-dvd"></div>
+    <div class="clearfix"></div>
+  </div>
+<% end%>

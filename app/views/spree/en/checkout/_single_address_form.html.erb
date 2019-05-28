@@ -66,7 +66,10 @@
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}state" %>>
       <label class="transp" for="validationCustom02"></label>
 
-      <select id="address_state" name="address[state_id]" class='observe_field select2' data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" >
+      <select id="address_state" name="address[state_id]" class='observe_field select2' data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_address_suburb"%>" >
+        <% if  address.new_record? %>
+          <option></option>
+        <% end %>
         <%= options_from_collection_for_select(address.country.states, :id, :name) %>
       </select>
     </div>
@@ -74,12 +77,10 @@
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}suburb" %>>
       <label class="transp" for="validationCustom02"></label>
 
-      <select id="address_suburb" class='select2' name="address[suburb_id]">
+      <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_address_suburb"%>" class='select2' name="address[suburb_id]">
 
       </select>
     </div>
-
-
 
 <% end %>
 

@@ -26,7 +26,7 @@
       </div>
     <% end %>
 
-    <div class="nun-ut <%= (address_type == "billing") ? 'bill_address' : ""%>" style="<%= (address_type == "billing") ?  'display: none;' : "" %>">
+    <div class="nun-ut <%= (address_type == "billing") ? 'bill_address' : "ship_address"%>" style="<%= (address_type == "billing") ?  'display: none;' : "" %>">
 
       <% if address_type == "shipping" %>
         <h3 class="heading3 sip-title"><%= Spree.t(address_type + "_address").upcase %></h3>
