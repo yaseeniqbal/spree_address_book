@@ -66,9 +66,9 @@
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}state" %>>
       <label class="transp" for="validationCustom02"></label>
 
-      <select id="address_state" name="address[state_id]" class='observe_field select2' data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_address_suburb"%>" >
+      <select id="validationCustom02" name="address[state_id]" class='observe_field select2' data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_address_suburb"%>" >
         <% if  address.new_record? %>
-          <option></option>
+          <option>Please Select Your Emirate</option>
         <% end %>
         <%= options_from_collection_for_select(address.country.states, :id, :name) %>
       </select>
@@ -79,6 +79,9 @@
 
       <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_address_suburb"%>" class='select2' name="address[suburb_id]">
 
+        <% if  address.new_record? %>
+          <option>Please Select Your City</option>
+        <% end %>
       </select>
     </div>
 

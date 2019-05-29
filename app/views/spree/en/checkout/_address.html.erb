@@ -1,6 +1,7 @@
 <div class=" alert  alert-dismissible" id="address-info-sec"></div>
 <% @addresses = spree_current_user ? spree_current_user.addresses : [] %>
 
+<% @order = @order.present? ? @order : current_order %>
 
 <% ['shipping','billing'].each do |address_type|
 
@@ -44,14 +45,19 @@
           <% secondry_addresses.insert(0,primary_address) %>
         <% end %>
 
-        <% empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
-        <% addresses = secondry_addresses + [empty_address] %>
+        <% if @addresses.last.persisted? %>
+          <% empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
+          <% addresses     = secondry_addresses + [empty_address] %>
+        <% else %>
+           <% addresses     = secondry_addresses %>
+        <% end %>
+
         <table class="table tower-table tower-table-f1 <%=address_type%>_address_table" id="<%= address_type %>" data-hook>
           <tbody>
             <% addresses.in_groups_of(3).each  do |grouped_address_col| %>
               <tr>
                 <% grouped_address_col.reject(&:nil?).each_with_index do |address, idx| %>
-                  <% if address.present? %>
+                  <% if address.persisted? %>
                     <td>
                       <span id="<%= [address_type, dom_id(address)].join('_') %>">
                         <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id) %>
@@ -122,8 +128,6 @@
         </div>
       <% end%>
 
-
-
     </div>
 
     <div id="new-<%= address_type%>-address-form"> </div>
@@ -173,7 +177,10 @@
 
       var address_type = $(this).attr("data-address-type");
 
+      $('.new_' + address_type + '_address_form').addClass("was-validated")
+
       $("#loading-gif").removeClass("hide");
+
       $.ajax({
         type: "POST",
         url: "/addresses",
@@ -185,10 +192,9 @@
           $('#new-'+ address_type+ '-address-form').html("");
           $('.' +address_type+'_address_table').show();
         },
-
         error: function(request, status, error) {
           $("#loading-gif").addClass("hide");
-          toastr.error("Some thing went wrong.Please fill all the required information and try again.")
+          toastr.error("Some thing went wrong.Please  fill all the mandatory fields first.")
         }
       });
       event.preventDefault();
