@@ -60,3 +60,32 @@
 
 
 
+
+$(function(){
+  $(document).on("click", ".cart-new-address-btn", function(e) {
+
+    var address_type = $(this).attr("data-address-type");
+
+    $('.new_' + address_type + '_address_form').addClass("was-validated")
+
+    $('.app-loader').show();
+
+    $.ajax({
+      type: "POST",
+      url: "/addresses",
+      data: $('.new_' + address_type + '_address_form').serialize(),
+      dataType: 'script',
+      format: 'js',
+      success: function(response) {
+        $('.app-loader').hide();
+        $('#new-'+ address_type+ '-address-form').html("");
+        $('.' +address_type+'_address_table').show();
+      },
+      error: function(request, status, error) {
+        $('.app-loader').hide();
+        toastr.error("Some thing went wrong.Please  fill all the mandatory fields first.")
+      }
+    });
+    event.preventDefault();
+  });
+})

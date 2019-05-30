@@ -63,7 +63,7 @@
                         <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id) %>
                       </span>
                       <ul class="sin-st">
-                        <li class="body3"><%= address.try(:firstname).titleize%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>
+                        <li class="body3"><%= address.full_name%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>
                       </ul>
                     </td>
                   <% else %>
@@ -169,36 +169,4 @@
 });
 </script>
  -->
-
- <script type="text/javascript">
-
-  $(function(){
-    $(document).on("click", ".cart-new-address-btn", function(e) {
-
-      var address_type = $(this).attr("data-address-type");
-
-      $('.new_' + address_type + '_address_form').addClass("was-validated")
-
-      $("#loading-gif").removeClass("hide");
-
-      $.ajax({
-        type: "POST",
-        url: "/addresses",
-        data: $('.new_' + address_type + '_address_form').serialize(),
-        dataType: 'script',
-        format: 'js',
-        success: function(response) {
-          $("#loading-gif").addClass("hide");
-          $('#new-'+ address_type+ '-address-form').html("");
-          $('.' +address_type+'_address_table').show();
-        },
-        error: function(request, status, error) {
-          $("#loading-gif").addClass("hide");
-          toastr.error("Some thing went wrong.Please  fill all the mandatory fields first.")
-        }
-      });
-      event.preventDefault();
-    });
-  })
-</script>
 
