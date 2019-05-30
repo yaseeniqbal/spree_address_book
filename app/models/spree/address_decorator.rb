@@ -10,6 +10,23 @@ Spree::Address.class_eval do
     callback.raw_filter.attributes.reject! { |key| key == :lastname } if callback.raw_filter.respond_to?(:attributes)
   end
 
+
+  def self.assign_address_to_user (user, address, order)
+
+
+    if user.ship_address.blank? || user.bill_address.blank?
+      user.ship_address_id  = address.id
+      user.bill_address_id  = address.id
+      user.save
+    end
+
+    order.bill_address_id = address.id
+    order.ship_address_id = address.id
+
+    order.save
+
+  end
+
   def require_zipcode?
     false
   end
