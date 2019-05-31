@@ -11,19 +11,12 @@ Spree::Address.class_eval do
   end
 
 
-  def self.assign_address_to_user (user, address, order)
+  def self.assign_address_to_order(address, order)
 
-
-    if user.ship_address.blank? || user.bill_address.blank?
-      user.ship_address_id  = address.id
-      user.bill_address_id  = address.id
-      user.save
+    if  order.ship_address.blank? || order.bill_address.blank?
+      order.bill_address_id = address.id
+      order.ship_address_id = address.id
     end
-
-    order.bill_address_id = address.id
-    order.ship_address_id = address.id
-
-    order.save
 
   end
 
