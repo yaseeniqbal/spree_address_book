@@ -64,10 +64,10 @@
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}state" %>>
       <label class="transp" for="validationCustom02"></label>
 
-      <select id="address_state" name="address[state_id]" class='observe_field select2' data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" required >
+      <select id="address_state" name="address[state_id]" class='observe_field select2 form-control' data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" required >
 
         <% if  address.new_record? %>
-          <option>Please Select Your Emirate</option>
+          <option value="">Please Select Your Emirate</option>
         <% end %>
         
         <%= options_from_collection_for_select(address.country.states, :id, :name) %>
@@ -77,10 +77,10 @@
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}suburb" %>>
       <label class="transp" for="validationCustom02"></label>
 
-      <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" class='select2' name="address[suburb_id]" required>
+      <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" class='select2 form-control' name="address[suburb_id]" required>
 
         <% if  address.new_record? %>
-          <option>Please Select Your City</option>
+          <option>Please Select Your City/Town</option>
         <% end %>
       </select>
     </div>
@@ -88,3 +88,9 @@
 <% end %>
 
 
+<script>
+    $(document).ready(function() {
+        $('#new_shipping_address_suburb').fadeOut(1000);
+        $('#new_billing_address_suburb').fadeOut(1000);
+    });
+</script>
