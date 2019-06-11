@@ -86,10 +86,17 @@
     </div>
 
 <% end %>
-<script>
-    $('#new_shipping_address_suburb_label').fadeOut(500);
-    $('#new_billing_address_suburb_label').fadeOut(500);
 
-    $('#new_shipping_address_suburb').fadeOut(500);
-    $('#new_billing_address_suburb').fadeOut(500);
+<script>
+    var addr = '<%= address_type %>';
+    if(addr == "shiping"){
+        $('#ssuburb').fadeOut(500);
+    }
+    else if(addr == "billing"){
+        $('#bsuburb').fadeOut(500);
+    }
+    else{
+        $('#ssuburb').fadeOut(500);
+        $('#bsuburb').fadeOut(500);
+    }
 </script>
