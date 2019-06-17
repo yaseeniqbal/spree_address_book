@@ -5,16 +5,15 @@ if defined?(Spree::Frontend)
     after_action :normalize_addresses, :only => :update
     before_action :set_addresses, :only => :update
 
-    
-
+  
     protected
 
     def set_addresses
+
       return unless params[:order] && params[:state] == "address"
 
       if params[:order][:ship_address_id].to_i > 0
         params[:order].delete(:ship_address_attributes)
-
         Spree::Address.find(params[:order][:ship_address_id]).user_id != spree_current_user.id && raise("Frontend address forging")
       else
         params[:order].delete(:ship_address_id)
@@ -22,7 +21,6 @@ if defined?(Spree::Frontend)
 
       if params[:order][:bill_address_id].to_i > 0
         params[:order].delete(:bill_address_attributes)
-
         Spree::Address.find(params[:order][:bill_address_id]).user_id != spree_current_user.id && raise("Frontend address forging")
       else
         params[:order].delete(:bill_address_id)
@@ -31,21 +29,27 @@ if defined?(Spree::Frontend)
     end
 
     def normalize_addresses
-      return unless params[:state] == "address" && @order.bill_address_id && @order.ship_address_id
 
+      return unless params[:state] == "address" && @order.bill_address_id && @order.ship_address_id
       # ensure that there is no validation errors and addresses were saved
       return unless @order.bill_address and @order.ship_address
 
-      bill_address = @order.bill_address
-      ship_address = @order.ship_address
-      if @order.bill_address_id != @order.ship_address_id && bill_address.same_as?(ship_address)
+      @order.bill_address_id  = params[:order].present? ? params[:order][:bill_address_id].to_i : @order.bill_address.id
+      @order.ship_address_id  = params[:order].present? ? params[:order][:ship_address_id].to_i : @order.ship_address.id
+      use_billing             = params[:order].present? ? params[:order][:use_billing] : "" 
+
+      bill_address            = @order.bill_address
+      ship_address            = @order.ship_address
+
+      if  (use_billing.present? || use_billing.to_i == 1)
         @order.update_column(:bill_address_id, ship_address.id)
-        bill_address.destroy
+        @order.update_column(:ship_address_id, ship_address.id)
       else
         bill_address.update_attribute(:user_id, spree_current_user.try(:id))
       end
 
       ship_address.update_attribute(:user_id, spree_current_user.try(:id))
+
     end
   end
 end

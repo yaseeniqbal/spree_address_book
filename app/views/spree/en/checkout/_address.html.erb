@@ -11,14 +11,14 @@
 
   <div class="sip-box " data-hook="<%= address_type %>_fieldset_wrapper">
 
-    
     <% if address_type == 'billing' && !Spree::AddressBook::Config[:disable_bill_address] %>
       <div class="prime-tp-btn billing-add-sm" >
         <ul>
+
           <li>Billing Address Same as Shipping Address</li>
           <li data-hook="use_billing">
             <%= label_tag :order_use_billing, :id => 'shipp_address_check', class: "switch" do %>
-              <%= check_box_tag 'order[use_billing]', '1', @order.shipping_eq_billing_address? %>
+              <%= check_box_tag 'order[use_billing]', '1', checked: true%>
               <span class="slider round"></span>
             <% end %>
 
