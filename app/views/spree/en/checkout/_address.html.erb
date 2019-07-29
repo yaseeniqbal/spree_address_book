@@ -139,7 +139,6 @@
 
     <div id="new-<%= address_type%>-address-form"> </div>
 
-
   <!--   <table class="table tower-table quz-1">
       <tbody>
         <tr>
@@ -190,7 +189,7 @@
       function default_bill_address(address_id){
           $('#order_bill_address_id_'+address_id).click()
       }
-      let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.id%>';
+      let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
       if(addr_id != ""){
           default_ship_address(addr_id);
           default_bill_address(addr_id);
