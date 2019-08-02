@@ -22,15 +22,17 @@
 <% Globalize.with_locale (I18n.locale) do %>
   <% address_id = address_type.chars.first %>
 
-
+  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3" id=<%="#{address_id}firstname" %> >
       <label for="validationCustom01"><%#=  address_form.object.persisted? ? ex_contact_name.try(:title) : new_contact_name.try(:title)  %>First Name</label>
       <%= address_form.text_field :firstname, class: 'form-control', id: "validationCustom01", required: true%>
     </div>
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
       <label for="validationCustom01">Last Name</label>
-       <%= address_form.text_field :lastname, class: 'form-control', id: "validationCustom01",  required: true  %>
+      <%= address_form.text_field :lastname, class: 'form-control', id: "validationCustom01",  required: true  %>
     </div>
+  </div>
+  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3" id=<%="#{address_id}address1" %>>
       <label for="validationCustom02"><%#= address_form.object.persisted? ? ex_contact_address1.try(:title)  : new_contact_address1.try(:title) %>Street Address Line </label>
       <%= address_form.text_field :address1, class: 'form-control', id: "validationCustom02",  required: true  %>
@@ -39,6 +41,8 @@
       <label >Street Address Line 2</label>
       <%= address_form.text_field :address2, class: 'form-control'%>
     </div>
+  </div>
+  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 plc-gry-col " id="#{address_id}address3">
       <label>Street Address Line 3</label>
       <%= address_form.text_field :address3, class: 'form-control' %>
@@ -47,9 +51,8 @@
       <label for="validationCustom02">Phone Number<%#= address_form.object.persisted? ? ex_contact_number.try(:title)  : new_contact_number.try(:title) %></label>
       <%= address_form.number_field :phone, class: 'form-control',id: "validationCustom02", required: true %>
     </div>
-
-
-
+  </div>
+  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}country" %>>
       <label  for="validationCustom02">Country</label>
       <span id=<%="#{address_id}country-selection" %>>
@@ -58,33 +61,28 @@
       </span>
     </div>
 
-
     <% address.country.present? ? address.country : (address.country_id = Spree::Config.default_country_id) %>
 
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}state" %>>
       <label for="validationCustom02">State/Province</label>
-
       <select id="address_state" name="address[state_id]" class='observe_field select2 form-control' data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" required >
-
         <% if  address.new_record? %>
           <option value="">Please Select Your Emirate</option>
         <% end %>
-        
         <%= options_from_collection_for_select(address.country.states, :id, :name) %>
       </select>
     </div>
-
+  </div>
+  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}suburb" %>>
       <label  id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_suburb_label'  : "new_#{address_type}_address_suburb_label"%>" for="validationCustom02">Suburb</label>
-
       <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" class='select2 form-control' name="address[suburb_id]" required>
-
         <% if  address.new_record? %>
           <option>Please Select Your City/Town</option>
         <% end %>
       </select>
     </div>
-
+  </div>
 <% end %>
 
 <script>
