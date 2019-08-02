@@ -1,3 +1,9 @@
+<style>
+  .help-block{
+    color: red;
+  }
+</style>
+
 <div class=" alert  alert-dismissible" id="address-info-sec"></div>
 <% @addresses = spree_current_user ? spree_current_user.addresses : [] %>
 
@@ -11,14 +17,14 @@
 
   <div class="sip-box " data-hook="<%= address_type %>_fieldset_wrapper">
 
-    
     <% if address_type == 'billing' && !Spree::AddressBook::Config[:disable_bill_address] %>
       <div class="prime-tp-btn billing-add-sm" >
         <ul>
+
           <li>Billing Address Same as Shipping Address</li>
           <li data-hook="use_billing">
             <%= label_tag :order_use_billing, :id => 'shipp_address_check', class: "switch" do %>
-              <%= check_box_tag 'order[use_billing]', '1', @order.shipping_eq_billing_address? %>
+              <%= check_box_tag 'order[use_billing]', '1', checked: true%>
               <span class="slider round"></span>
             <% end %>
 
@@ -42,7 +48,6 @@
         <% user_billing_address  = user.present? && user.billing_address.present? ?  user.billing_address.id: "" %>
         <% primary_address     = @addresses.select{|s| ( user_shipping_address || user_billing_address  ) == s.id}.last%>
         <% secondry_addresses  = @addresses.reject{|s| ( user_shipping_address || user_billing_address  ) == s.id} %>
-
         <% if primary_address.present? %>
           <% secondry_addresses.insert(0,primary_address) %>
         <% end %>
@@ -134,7 +139,6 @@
 
     <div id="new-<%= address_type%>-address-form"> </div>
 
-
   <!--   <table class="table tower-table quz-1">
       <tbody>
         <tr>
@@ -177,4 +181,18 @@
 });
 </script>
  -->
-
+<script>
+  $(document).ready(function () {
+      function default_ship_address(address_id){
+          $('#order_ship_address_id_'+address_id).click();
+      }
+      function default_bill_address(address_id){
+          $('#order_bill_address_id_'+address_id).click()
+      }
+      let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
+      if(addr_id != ""){
+          default_ship_address(addr_id);
+          default_bill_address(addr_id);
+      }
+  })
+</script>
