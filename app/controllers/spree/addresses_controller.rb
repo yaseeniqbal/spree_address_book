@@ -11,11 +11,22 @@ if defined?(Spree::Frontend)
     end
 
     def create
+
       @address = spree_current_user.addresses.build(address_params)
-      @address.city = @address.suburb.name
-      @address.state_id = params[:address][:state_id]
-      state_name = Spree::State.find(@address.state_id).name
-      @address.state_name = state_name
+
+      if  (params[:address][:suburb_id].to_i > 0)
+        @address.city = @address.suburb.name
+      else
+        @address.text_suburb = params[:address][:text_suburb]
+      end
+
+      if (params[:address][:state_id].to_i > 0 )
+        @address.state_id = params[:address][:state_id]
+        state_name = Spree::State.find(@address.state_id).name
+        @address.state_name = state_name
+      else
+        @address.text_state = params[:address][:text_state]
+      end
 
     end
 

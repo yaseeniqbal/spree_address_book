@@ -10,6 +10,11 @@ Spree::Address.class_eval do
     callback.raw_filter.attributes.reject! { |key| key == :lastname } if callback.raw_filter.respond_to?(:attributes)
   end
 
+  _validators.reject! { |key, _| key == :city }
+  _validate_callbacks.each do |callback|
+    callback.raw_filter.attributes.reject! { |key| key == :city } if callback.raw_filter.respond_to?(:attributes)
+  end
+
 
   def self.assign_address_to_order(address, order)
 
@@ -60,7 +65,7 @@ Spree::Address.class_eval do
       company,
       address1,
       address2,
-      "#{city}, #{state_text} #{zipcode}",
+      "#{city.present? ? city : text_suburb}, #{state_text} #{zipcode}",
       country.to_s
     ].reject(&:blank?).map{ |attribute| ERB::Util.html_escape(attribute) }.join('<br/>')
   end
@@ -68,9 +73,13 @@ Spree::Address.class_eval do
    def complete_address_info
     [
       address1,
-      "#{city.truncate(7)}, #{state.name}",
+      "#{city.present? ? city.truncate(7) : text_suburb.truncate(7)}, #{state.present? ? state.name : text_state}",
       country.to_s
     ].reject(&:blank?).map{ |attribute| ERB::Util.html_escape(attribute) }.join('<br/>')
+  end
+
+  def city_state_info
+    "#{city.present? ? city.truncate(7) : text_suburb.truncate(7)}, #{state.present? ? state.name : text_state}"
   end
 
   # UPGRADE_CHECK if future versions of spree have a custom destroy function, this will break
