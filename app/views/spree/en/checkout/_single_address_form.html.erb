@@ -86,7 +86,7 @@
       <label  id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_suburb_label'  : "new_#{address_type}_address_suburb_label"%>" for="validationCustom02">Suburb</label>
       <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" class= "select2 form-control js-<%=address_type%>-uae-suburb-field" name="address[suburb_id]" required>
         <% if  address.new_record? %>
-          <option>Please Select Your City/Town</option>
+          <option value="">Please Select Your City/Town</option>
         <% end %>
       </select>
     </div>
