@@ -57,15 +57,15 @@
       <label  for="validationCustom02">Country</label>
       <span id=<%="#{address_id}country-selection" %>>
         <% default_country = Spree::Country.where(name: "United Arab Emirates").last %>
-        <%= address_form.collection_select :country_id, available_countries , :id, :name, {:prompt => true,selected: default_country.try(:id) }, { class: "form-control country-select-dp js-#{address_type}-country-select-drop", required: true} %>
+        <%= address_form.collection_select :country_id, available_countries , :id, :name, {:prompt =>"Please select your country" }, { class: "form-control country-select-dp js-#{address_type}-country-select-drop", required: true} %>
       </span>
     </div>
 
     <% address.country.present? ? address.country : (address.country_id = Spree::Config.default_country_id) %>
 
-    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 js-<%=address_type%>-uae-state-sec "  id=<%="#{address_id}state" %>>
+    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 hide  js-<%=address_type%>-uae-state-sec "  id=<%="#{address_id}state" %>>
       <label for="validationCustom02">State/Province</label>
-      <select id="address_state" name="address[state_id]" class="observe_field select2 form-control js-<%=address_type%>-uae-state-field " data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" required >
+      <select id="address_state" name="address[state_id]" class="observe_field select2 form-control js-<%=address_type%>-uae-state-field " data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>">
         <% if  address.new_record? %>
           <option value="">Please Select Your Emirate</option>
         <% end %>
@@ -73,27 +73,27 @@
       </select>
     </div>
 
-    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 hide js-<%=address_type%>-non-uae-state-sec"  id=<%="#{address_id}state" %>>
+    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 js-<%=address_type%>-non-uae-state-sec"  id=<%="#{address_id}state" %>>
       <label for="validationCustom02">State/Province</label>
-      <%= address_form.text_field :text_state, class: "form-control js-#{address_type}-non-uae-state-field" %>
+      <%= address_form.text_field :text_state, class: "form-control js-#{address_type}-non-uae-state-field", required: true %>
 
     </div>
 
 
   </div>
   <div class="row">
-    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 js-<%=address_type%>-uae-suburb-sec"  id=<%="#{address_id}suburb" %>>
+    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 hide js-<%=address_type%>-uae-suburb-sec"  id=<%="#{address_id}suburb" %>>
       <label  id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_suburb_label'  : "new_#{address_type}_address_suburb_label"%>" for="validationCustom02">Suburb</label>
-      <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" class= "select2 form-control js-<%=address_type%>-uae-suburb-field" name="address[suburb_id]" required>
+      <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" class= "select2 form-control js-<%=address_type%>-uae-suburb-field" name="address[suburb_id]" >
         <% if  address.new_record? %>
-          <option value="">Please Select Your City/Town</option>
+          <option value="">Please Select Your State/Province First</option>
         <% end %>
       </select>
     </div>
 
-    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 hide js-<%=address_type%>-non-uae-suburb-sec"  id=<%="#{address_id}suburb" %>>
+    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 js-<%=address_type%>-non-uae-suburb-sec"  id=<%="#{address_id}suburb" %>>
       <label for="validationCustom02">Suburb</label>
-      <%= address_form.text_field :text_suburb, class: "form-control js-#{address_type}-non-uae-suburb-field" %>
+      <%= address_form.text_field :text_suburb, class: "form-control js-#{address_type}-non-uae-suburb-field", required: true %>
     </div>
 
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 plc-gry-col " id="#{address_id}zipcode">
@@ -102,6 +102,7 @@
     </div>
   </div>
 <% end %>
+
 <!-- <script>
     var addr = '<%= address_type %>';
     if(addr == "shiping"){
