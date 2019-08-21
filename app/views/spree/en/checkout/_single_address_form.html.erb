@@ -22,7 +22,6 @@
 <% Globalize.with_locale (I18n.locale) do %>
   <% address_id = address_type.chars.first %>
 
-  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3" id=<%="#{address_id}firstname" %> >
       <label for="validationCustom01"><%#=  address_form.object.persisted? ? ex_contact_name.try(:title) : new_contact_name.try(:title)  %>First Name</label>
       <%= address_form.text_field :firstname, class: 'form-control', id: "validationCustom01", required: true%>
@@ -31,8 +30,6 @@
       <label for="validationCustom01">Last Name</label>
       <%= address_form.text_field :lastname, class: 'form-control', id: "validationCustom01",  required: true  %>
     </div>
-  </div>
-  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3" id=<%="#{address_id}address1" %>>
       <label for="validationCustom02"><%#= address_form.object.persisted? ? ex_contact_address1.try(:title)  : new_contact_address1.try(:title) %>Street Address Line </label>
       <%= address_form.text_field :address1, class: 'form-control', id: "validationCustom02",  required: true  %>
@@ -41,8 +38,6 @@
       <label >Street Address Line 2</label>
       <%= address_form.text_field :address2, class: 'form-control'%>
     </div>
-  </div>
-  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 plc-gry-col " id="#{address_id}address3">
       <label>Street Address Line 3</label>
       <%= address_form.text_field :address3, class: 'form-control' %>
@@ -51,8 +46,6 @@
       <label for="validationCustom02">Phone Number<%#= address_form.object.persisted? ? ex_contact_number.try(:title)  : new_contact_number.try(:title) %></label>
       <%= address_form.number_field :phone, class: 'form-control',id: "validationCustom02", required: true %>
     </div>
-  </div>
-  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}country" %>>
       <label  for="validationCustom02">Country</label>
       <span id=<%="#{address_id}country-selection" %>>
@@ -80,8 +73,6 @@
     </div>
 
 
-  </div>
-  <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 hide js-<%=address_type%>-uae-suburb-sec"  id=<%="#{address_id}suburb" %>>
       <label  id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_suburb_label'  : "new_#{address_type}_address_suburb_label"%>" for="validationCustom02">Suburb</label>
       <select id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" class= "select2 form-control js-<%=address_type%>-uae-suburb-field" name="address[suburb_id]" >
@@ -100,7 +91,6 @@
       <label>Zipcode</label>
       <%= address_form.text_field :zipcode, class: 'form-control', required: true %>
     </div>
-  </div>
 <% end %>
 
 <!-- <script>
