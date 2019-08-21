@@ -52,12 +52,13 @@
       <%= address_form.number_field :phone, class: 'form-control',id: "validationCustom02", required: true %>
     </div>
   </div>
+
   <div class="row">
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}country" %>>
       <label  for="validationCustom02">Country</label>
       <span id=<%="#{address_id}country-selection" %>>
         <% default_country = Spree::Country.where(name: "United Arab Emirates").last %>
-        <%= address_form.collection_select :country_id, available_countries , :id, :name, {:prompt =>"Please select your country" }, { class: "form-control country-select-dp js-#{address_type}-country-select-drop", required: true} %>
+        <%= address_form.collection_select :country_id, available_countries , :id, :name, {selected: nil, :prompt =>"Please select your country" }, { class: "form-control country-select-dp js-#{address_type}-country-select-drop", required: true} %>
       </span>
     </div>
 
