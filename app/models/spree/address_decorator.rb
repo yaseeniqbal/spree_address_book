@@ -73,13 +73,13 @@ Spree::Address.class_eval do
    def complete_address_info
     [
       address1,
-      "#{city.present? ? city.truncate(7) : text_suburb.truncate(7)}, #{state.present? ? state.name : text_state}",
+      "#{city.present? ? city : text_suburb}, #{state.present? ? state.name : text_state}",
       country.to_s
     ].reject(&:blank?).map{ |attribute| ERB::Util.html_escape(attribute) }.join('<br/>')
   end
 
   def city_state_info
-    "#{city.present? ? city.truncate(7) : text_suburb.truncate(7)}, #{state.present? ? state.name : text_state}"
+    "#{city.present? ? city : text_suburb}, #{state.present? ? state.name : text_state}"
   end
 
   # UPGRADE_CHECK if future versions of spree have a custom destroy function, this will break
