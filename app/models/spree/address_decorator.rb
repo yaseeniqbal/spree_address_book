@@ -17,12 +17,24 @@ Spree::Address.class_eval do
 
 
   def self.assign_address_to_order(address, order)
-
-    if  order.ship_address.blank? || order.bill_address.blank?
+    if  order.present? && (order.ship_address.blank? || order.bill_address.blank?)
       order.bill_address_id = address.id
       order.ship_address_id = address.id
     end
+  end
 
+  def self.shipping_cost_calculation(address, order) 
+    begin
+      if order.present? || order.shipping_address.present?
+        order.shipping_address = address
+        if order.state != 'address'
+          order.update(state: "address")
+        end
+        order.next
+        order.update(state: "address")
+      end
+    rescue
+    end
   end
 
   def require_zipcode?
