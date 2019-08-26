@@ -48,9 +48,9 @@
         <% user_billing_address  = user.present? && user.billing_address.present? ?  user.billing_address.id: "" %>
         <% primary_address     = @addresses.select{|s| ( user_shipping_address || user_billing_address  ) == s.id}.last%>
         <% secondry_addresses  = @addresses.reject{|s| ( user_shipping_address || user_billing_address  ) == s.id} %>
-        <% if primary_address.present? %>
-          <% secondry_addresses.insert(0,primary_address) %>
-        <% end %>
+        <%# if primary_address.present? %>
+          <%# secondry_addresses.insert(0,primary_address) %>
+        <%# end %>
 
         <% if @addresses.last.persisted? %>
           <% empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
@@ -67,7 +67,8 @@
                   <% if address.persisted? %>
                     <td>
                       <span id="<%= [address_type, dom_id(address)].join('_') %>">
-                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id) %>
+                        <% shipping_address = (current_order.present?  && current_order.shipping_address.present? )? current_order.shipping_address : addresses.first %>
+                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address == shipping_address), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
                       </span>
                       <ul class="sin-st">
                         <li class="body3"><%= address.full_name%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>
@@ -185,16 +186,49 @@
  -->
 <script>
   $(document).ready(function () {
-      function default_ship_address(address_id){
-          $('#order_ship_address_id_'+address_id).click();
-      }
-      function default_bill_address(address_id){
-          $('#order_bill_address_id_'+address_id).click()
-      }
-      let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
-      if(addr_id != ""){
-          default_ship_address(addr_id);
-          default_bill_address(addr_id);
-      }
+
+    // function default_ship_address(address_id){
+    //     $('#order_ship_address_id_'+address_id).click();
+    // }
+    // function default_bill_address(address_id){
+    //     $('#order_bill_address_id_'+address_id).click()
+    // }
+    // let addr_id = '<%#=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
+
+    // if(addr_id != ""){
+    //     default_ship_address(addr_id);
+    //     default_bill_address(addr_id);
+    // }
+
+    function shipping_calculator_request(address_id){
+
+      $('.app-loader').show();
+      $.ajax({
+          type: "GET",
+          url: "/shipping_calculator",
+          data: {shipping_address_id: address_id},
+          dataType: 'script',
+          format: 'js',
+          success: function (response) {
+              // $("#loading-gif").addClass("hide");
+          },
+
+          error: function (request, status, error) {
+            $('.app-loader').hide();
+          }
+      });
+    }
+
+    let checked_shipping_address = $(".js-shipping-cost-address:checked");
+    if (checked_shipping_address.length == 1) {
+      let selected_adddress_id = $(".js-shipping-cost-address:checked").data("checkout-address-id");
+      shipping_calculator_request(selected_adddress_id)
+    } 
+
+    $(document).on("click", ".js-shipping-cost-address", function(e) {
+      let shipping_address_id = $(this).data("checkout-address-id");
+      shipping_calculator_request(shipping_address_id)
+
+    });
   })
 </script>
