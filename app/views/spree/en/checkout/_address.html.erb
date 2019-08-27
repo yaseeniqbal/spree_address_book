@@ -33,8 +33,6 @@
       </div>
     <% end %>
 
-
-
     <div class="nun-ut <%= (address_type == "billing") ? 'bill_address' : "ship_address"%>" style="<%= (address_type == "billing") ?  'display: none;' : "" %>">
 
       <% if address_type == "shipping" %>
@@ -66,8 +64,8 @@
                   <% if address.persisted? %>
                     <td>
                       <span id="<%= [address_type, dom_id(address)].join('_') %>">
-                        <% shipping_address = (current_order.present?  && current_order.shipping_address.present? )? current_order.shipping_address : addresses.first %>
-                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == shipping_address.id), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
+                        <%# shipping_address = (current_order.present?  && current_order.shipping_address.present? )? current_order.shipping_address : addresses.first %>
+                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
                       </span>
                       <ul class="sin-st">
                         <li class="body3"><%= address.full_name%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>
@@ -186,18 +184,18 @@
 <script>
   $(document).ready(function () {
 
-    // function default_ship_address(address_id){
-    //     $('#order_ship_address_id_'+address_id).click();
-    // }
-    // function default_bill_address(address_id){
-    //     $('#order_bill_address_id_'+address_id).click()
-    // }
-    // let addr_id = '<%#=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
+    function default_ship_address(address_id){
+        $('#order_ship_address_id_'+address_id).click();
+    }
+    function default_bill_address(address_id){
+        $('#order_bill_address_id_'+address_id).click()
+    }
+    let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
 
-    // if(addr_id != ""){
-    //     default_ship_address(addr_id);
-    //     default_bill_address(addr_id);
-    // }
+    if(addr_id != ""){
+        default_ship_address(addr_id);
+        default_bill_address(addr_id);
+    }
 
     function shipping_calculator_request(address_id){
 
