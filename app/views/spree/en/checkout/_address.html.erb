@@ -51,7 +51,6 @@
         <%# if primary_address.present? %>
           <%# secondry_addresses.insert(0,primary_address) %>
         <%# end %>
-
         <% if @addresses.last.persisted? %>
           <% empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
           <% addresses     = secondry_addresses + [empty_address] %>
@@ -68,7 +67,7 @@
                     <td>
                       <span id="<%= [address_type, dom_id(address)].join('_') %>">
                         <% shipping_address = (current_order.present?  && current_order.shipping_address.present? )? current_order.shipping_address : addresses.first %>
-                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address == shipping_address), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
+                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == shipping_address.id), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
                       </span>
                       <ul class="sin-st">
                         <li class="body3"><%= address.full_name%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>

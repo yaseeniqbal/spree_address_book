@@ -5,13 +5,14 @@
 <% primary_address     = addresses.select{|s| ( user_shipping_address || user_billing_address  ) == s.id}.last%>
 <% secondry_addresses  = addresses.reject{|s| ( user_shipping_address || user_billing_address  ) == s.id} %>
 
-<% if primary_address.present? %>
-  <% secondry_addresses.insert(0,primary_address) %>
-<% end %>
+<%# if primary_address.present? %>
+  <%# secondry_addresses.insert(0,primary_address) %>
+<%# end %>
 
 
 <% if add_empty %>
-  <% empty_address = Spree::Address.new%>
+  <%# empty_address = Spree::Address.new%>
+  <% empty_address = Spree::Address.new country_id: Spree::Config.default_country_id%>
   <% addresses     = secondry_addresses + [empty_address] %>
 <% else %>
    <% addresses     = secondry_addresses %>
