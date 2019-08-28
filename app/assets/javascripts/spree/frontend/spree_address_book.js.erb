@@ -87,7 +87,40 @@ $(function(){
         }
     });
 
+    $(document).on('click', '.cart-new-address-btn, .js-address-drop-down, .js-address-city-drop-down', function () {
+        if ($(this).data('address-type') == "shipping") {
+            if ($('.js-langua-country-shipping').text() == "Please select your country") {
+                $('.js-shipping-country-error').parent().after('<small id="js-drop_down_error" class="help-block" style="">Please select your country</small>')
 
+            }
+            if ( !$('.js-shipping-uae-state-sec').hasClass('hide') && $('.js-langua-city-shipping').text() == "Please select your emirate") {
+                $('.js-shipping-uae-state-sec-error').after('<p id="js-drop_state_down_error_shipping" class="help-block" style="font-size: 10px">Please select your state/province</p>')
+            }
+        }else if ($(this).data('address-type') == "billing") {
+            if ($('.js-langua-country-billing').text() == "Please select your country") {
+                $('.js-billing-country-error').parent().after('<small id="js-drop_down_billing_error" class="help-block" style="">Please select your country/state</small>')
+            }
+            if ( !$('.js-shipping-uae-state-sec').hasClass('hide') && $('.js-langua-city-billing').text() == "Please select your emirate") {
+                $('.js-billing-uae-state-sec-error').after('<p id="js-drop_state_down_error_billing" class="help-block" style="font-size: 10px">Please select your state/province</p>')
+            }
+        }
+        else{
+            if ($(this).hasClass('js-city-error-shipping')) {
+
+                $('#js-drop_state_down_error_shipping').remove();
+            } else if ($(this).hasClass('js-city-error-billing')) {
+                $('#js-drop_state_down_error_billing').remove();
+            }
+
+            if ($(this).hasClass('js-error-country-shipping')) {
+                $('#js-drop_down_error').remove();
+            } else {
+                $('#js-drop_down_billing_error').remove();
+
+            }
+        }
+
+    })
     $(document).on("change", ".js-shipping-country-select-drop", function(e) {
       let selectedVal = $(".js-shipping-country-select-drop option:selected").text();
       if (selectedVal == "United Arab Emirates"){
@@ -144,3 +177,9 @@ $(function(){
   });
 
 })
+
+//if ($('.js-langua-tp-city').text() == "Please select your emirate") {
+//    $('.js-shipping-country-error').parent().after('<small id="js-drop_down_error" class="help-block" style="">Please select your country/state</small>')
+//} else {
+//    $('#js-drop_down_error').remove();
+//}

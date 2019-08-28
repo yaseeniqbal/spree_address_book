@@ -1,12 +1,12 @@
-<div class="col-md-12 col-sm-12 col-lg-12 cn_ry p-0">
+<div class="col-md-12 col-sm-12 col-lg-12 cn_ry p-0 js-<%=address_type%>-uae-state-sec-error">
   <ul class="phon">
     <li class="uae-tac dropdown frm-country js-address-suburbs-drop-down">
-      <a href="#" class="langua-tp-custome js-langua-tp-city" style=" background-repeat: no-repeat; background-position: left; " data-toggle="dropdown" aria-expanded="false">Please select your emirate</a>
+      <a href="#" class="langua-tp-custome js-langua-tp-city js-langua-city-<%= address_type %>" style=" background-repeat: no-repeat; background-position: left; " data-toggle="dropdown" aria-expanded="false">Please select your emirate</a>
       <ul class="dropdown-menu city_drop_down country_dropdown">
         <% available_countries.each  do |country| %>
-          <li class="city_drop country_drop">
+          <li class="city_drop country_drop <%= address_type %>">
             <a type="button" class="">
-              <font class="js-address-city-drop-down js-address-drop-down" id='<%= country.id %>'> <%= country.name %></font>
+              <font class="js-address-city-drop-down js-city-error-<%=address_type%> js-address-drop-down" id='<%= country.id %>'> <%= country.name %></font>
             </a>
           </li>
         <% end %>

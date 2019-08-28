@@ -58,12 +58,12 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6 col-lg-6 col-sm-6 mb-3"  id=<%="#{address_id}country" %>>
+    <div class="col-md-6 col-lg-6 col-sm-6 mb-3 js-<%=address_type%>-country-error"  id=<%="#{address_id}country" %>>
 <!--      <label  for="validationCustom02">Country</label>-->
       <span id=<%="#{address_id}country-selection" %>>
         <% default_country = Spree::Country.where(name: "United Arab Emirates").last %>
         <%= address_form.collection_select :country_id, available_countries , :id, :name, {:prompt => true,selected: default_country.try(:id) }, { class: "form-control country-select-dp js-#{address_type}-country-select-drop",style: 'display: none', required: true} %>
-        <%= render :partial => 'spree/en/checkout/address_drop_down', :locals => { :available_countries => available_countries } %>
+        <%= render :partial => 'spree/en/checkout/address_drop_down', :locals => { :available_countries => available_countries, address_type:  address_type} %>
       </span>
     </div>
 
@@ -74,7 +74,7 @@
 <!--    </div>-->
     <div class="col-md-6 col-lg-6 col-sm-6 mb-3 js-<%=address_type%>-uae-state-sec "  id=<%="#{address_id}state" %>>
 <!--      <label for="validationCustom02">State/Province</label>-->
-      <%= render :partial => 'spree/en/checkout/address_city_drop_down', :locals => { :available_countries => address.country.states } %>
+      <%= render :partial => 'spree/en/checkout/address_city_drop_down', :locals => { :available_countries => address.country.states, address_type:  address_type } %>
       <select style="display: none;" id="address_state" name="address[state_id]" class="observe_field select2 form-control js-<%=address_type%>-uae-state-field " data-base-url="<%=suburbs_path(format: :js) %>?state_id=" data-update="#address_suburb" data-current-el-id="<%= (address.present?  && address.id.present?) ? address.id.to_s + '_address_suburb'  : "new_#{address_type}_address_suburb"%>" required >
         <% if  address.new_record? %>
           <option value="">Please Select Your Emirate</option>
@@ -104,7 +104,7 @@
       <div class="col-md-12 col-sm-12 col-lg-12 cn_ry p-0">
         <ul class="phon">
           <li class="uae-tac dropdown frm-country">
-            <a href="#" class="langua-tp-custome js-langua-tp-suburbs" style=" background-repeat: no-repeat; background-position: left; " data-toggle="dropdown" aria-expanded="false">Please select your city</a>
+            <a href="#" class="langua-tp-custome js-langua-tp-suburbs-<%= address_type %>" style=" background-repeat: no-repeat; background-position: left; " data-toggle="dropdown" aria-expanded="false">Please select your city</a>
             <ul class="dropdown-menu suburbs_dropdown country_dropdown">
 
             </ul>
