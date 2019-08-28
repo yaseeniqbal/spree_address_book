@@ -2,9 +2,9 @@
   <ul class="phon">
     <li class="uae-tac dropdown frm-country js-address-suburbs-drop-down">
       <a href="#" class="langua-tp-custome js-langua-tp-city js-langua-city-<%= address_type %>" style=" background-repeat: no-repeat; background-position: left; " data-toggle="dropdown" aria-expanded="false">Please select your emirate</a>
-      <ul class="dropdown-menu city_drop_down country_dropdown">
+      <ul class="dropdown-menu city_drop_down country_dropdown <%= address_type %>">
         <% available_countries.each  do |country| %>
-          <li class="city_drop country_drop <%= address_type %>">
+          <li class="city_drop country_drop ">
             <a type="button" class="">
               <font class="js-address-city-drop-down js-city-error-<%=address_type%> js-address-drop-down" id='<%= country.id %>'> <%= country.name %></font>
             </a>

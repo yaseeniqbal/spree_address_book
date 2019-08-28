@@ -105,7 +105,7 @@
         <ul class="phon">
           <li class="uae-tac dropdown frm-country">
             <a href="#" class="langua-tp-custome js-langua-tp-suburbs-<%= address_type %>" style=" background-repeat: no-repeat; background-position: left; " data-toggle="dropdown" aria-expanded="false">Please select your city</a>
-            <ul class="dropdown-menu suburbs_dropdown country_dropdown">
+            <ul class="dropdown-menu suburbs_dropdown country_dropdown <%= address_type %>">
 
             </ul>
           </li>
@@ -137,13 +137,22 @@
     $(".js-billing-non-uae-suburb-sec").removeClass("hide");
 
     $(document).on("click", ".js-address-drop-down", function(e) {
+        let address_type = 'shipping';
+         if($(this).parent().parent().parent().hasClass('billing')){
+             address_type = 'billing'
+         }
         let current_id = $(this).attr('id');
         let drop_down_name = 'country-select-dp';
         if($(this).hasClass('js-address-city-drop-down')){
             drop_down_name ='observe_field';
         }
         else if($(this).hasClass('js-address-suburbs-drop-down')){
-            drop_down_name = 'js-shipping-uae-suburb-field'
+            if (address_type == 'shipping'){
+                drop_down_name = 'js-shipping-uae-suburb-field'
+            }
+            else{
+                drop_down_name = 'js-billing-uae-suburb-field'
+            }
         }
         let current_event=$('.'+drop_down_name +' option[value='+current_id+']').prop('selected',true);
         $('.'+drop_down_name).trigger('change');
