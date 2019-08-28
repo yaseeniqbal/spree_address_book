@@ -88,59 +88,59 @@ $(function(){
     });
 
     // International COUNTRY Drop Down Case
-  //   $(document).on("change", ".js-shipping-country-select-drop", function(e) {
-  //     let selectedVal = $(".js-shipping-country-select-drop option:selected").text();
-  //     if (selectedVal == "United Arab Emirates"){
+    $(document).on("change", ".js-shipping-country-select-drop", function(e) {
+      let selectedVal = $(".js-shipping-country-select-drop option:selected").text();
+      if (selectedVal == "United Arab Emirates"){
 
-  //      $(".js-shipping-uae-state-sec").removeClass("hide");
-  //      $(".js-shipping-uae-suburb-sec").removeClass("hide");
-  //      $(".js-shipping-uae-state-field").attr("required", true);
-  //      $(".js-shipping-uae-suburb-field").attr("required", true);
-  //      $(".js-shipping-non-uae-state-sec").addClass("hide");
-  //      $(".js-shipping-non-uae-suburb-sec").addClass("hide");
-  //       $(".js-shipping-non-uae-state-field").removeAttr('required');
-  //      $(".js-shipping-non-uae-suburb-field").removeAttr('required');
+       $(".js-shipping-uae-state-sec").removeClass("hide");
+       $(".js-shipping-uae-suburb-sec").removeClass("hide");
+       $(".js-shipping-uae-state-field").attr("required", true);
+       $(".js-shipping-uae-suburb-field").attr("required", true);
+       $(".js-shipping-non-uae-state-sec").addClass("hide");
+       $(".js-shipping-non-uae-suburb-sec").addClass("hide");
+        $(".js-shipping-non-uae-state-field").removeAttr('required');
+       $(".js-shipping-non-uae-suburb-field").removeAttr('required');
 
-  //     }else{
+      }else{
 
-  //       $(".js-shipping-uae-state-sec").addClass("hide");
-  //       $(".js-shipping-uae-suburb-sec").addClass("hide");
-  //       $(".js-shipping-uae-state-field").removeAttr('required')
-  //       $(".js-shipping-uae-suburb-field").removeAttr('required')
-  //       $(".js-shipping-non-uae-state-sec").removeClass("hide");
-  //       $(".js-shipping-non-uae-suburb-sec").removeClass("hide");
-  //       $(".js-shipping-non-uae-state-field").attr("required", true);
-  //       $(".js-shipping-non-uae-suburb-field").attr("required", true);
+        $(".js-shipping-uae-state-sec").addClass("hide");
+        $(".js-shipping-uae-suburb-sec").addClass("hide");
+        $(".js-shipping-uae-state-field").removeAttr('required')
+        $(".js-shipping-uae-suburb-field").removeAttr('required')
+        $(".js-shipping-non-uae-state-sec").removeClass("hide");
+        $(".js-shipping-non-uae-suburb-sec").removeClass("hide");
+        $(".js-shipping-non-uae-state-field").attr("required", true);
+        $(".js-shipping-non-uae-suburb-field").attr("required", true);
 
-  //     }
-  //   });
-
-
-  //   $(document).on("change", ".js-billing-country-select-drop", function(e) {
-  //     let selectedVal = $(".js-billing-country-select-drop option:selected").text();
-  //     if (selectedVal == "United Arab Emirates"){
-
-  //       $(".js-billing-uae-state-sec").removeClass("hide");
-  //       $(".js-billing-uae-suburb-sec").removeClass("hide");
-  //       $(".js-billing-uae-state-field").attr("required", true);
-  //       $(".js-billing-uae-suburb-field").attr("required", true);
-  //       $(".js-billing-non-uae-state-sec").addClass("hide");
-  //       $(".js-billing-non-uae-suburb-sec").addClass("hide");
-  //       $(".js-billing-non-uae-state-field").removeAttr('required');
-  //       $(".js-billing-non-uae-suburb-field").removeAttr('required');
+      }
+    });
 
 
+    $(document).on("change", ".js-billing-country-select-drop", function(e) {
+      let selectedVal = $(".js-billing-country-select-drop option:selected").text();
+      if (selectedVal == "United Arab Emirates"){
 
-  //     }else{
-  //       $(".js-billing-uae-state-sec").addClass("hide");
-  //       $(".js-billing-uae-suburb-sec").addClass("hide");
-  //       $(".js-billing-uae-state-field").removeAttr('required');
-  //       $(".js-billing-uae-suburb-field").removeAttr('required');
-  //       $(".js-billing-non-uae-state-sec").removeClass("hide");
-  //       $(".js-billing-non-uae-suburb-sec").removeClass("hide");
-  //       $(".js-billing-non-uae-state-field").attr("required", true);
-  //       $(".js-billing-non-uae-suburb-field").attr("required", true);
-  //     }
-  // });
+        $(".js-billing-uae-state-sec").removeClass("hide");
+        $(".js-billing-uae-suburb-sec").removeClass("hide");
+        $(".js-billing-uae-state-field").attr("required", true);
+        $(".js-billing-uae-suburb-field").attr("required", true);
+        $(".js-billing-non-uae-state-sec").addClass("hide");
+        $(".js-billing-non-uae-suburb-sec").addClass("hide");
+        $(".js-billing-non-uae-state-field").removeAttr('required');
+        $(".js-billing-non-uae-suburb-field").removeAttr('required');
+
+
+
+      }else{
+        $(".js-billing-uae-state-sec").addClass("hide");
+        $(".js-billing-uae-suburb-sec").addClass("hide");
+        $(".js-billing-uae-state-field").removeAttr('required');
+        $(".js-billing-uae-suburb-field").removeAttr('required');
+        $(".js-billing-non-uae-state-sec").removeClass("hide");
+        $(".js-billing-non-uae-suburb-sec").removeClass("hide");
+        $(".js-billing-non-uae-state-field").attr("required", true);
+        $(".js-billing-non-uae-suburb-field").attr("required", true);
+      }
+  });
 
 })
