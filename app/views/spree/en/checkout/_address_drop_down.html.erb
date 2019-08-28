@@ -1,0 +1,20 @@
+<div class="col-md-12 col-sm-12 col-lg-12 cn_ry p-0">
+  <ul class="phon">
+    <li class="uae-tac dropdown frm-country js-reg-country-drop">
+      <a href="#" class="langua-tp-custome js-langua-tp" style=" background-repeat: no-repeat; background-position: left; " data-toggle="dropdown" aria-expanded="false">Please select your country</a>
+      <ul class="dropdown-menu country_dropdown">
+        <% available_countries.each  do |country| %>
+          <li class="country_drop">
+            <a type="button" class="">
+              <% if defined?(country.flag_image) && country.flag_image.present? %>
+                <% c_image = country.flag_image %>
+                <%= image_tag 'flags/'+c_image, alt: '' %>
+              <% end %>
+              <font class="js-address-drop-down" id='<%= country.id %>'> <%= country.name %></font>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  </ul>
+</div>
