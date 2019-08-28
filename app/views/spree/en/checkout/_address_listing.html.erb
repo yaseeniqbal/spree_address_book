@@ -11,8 +11,8 @@
 
 
 <% if add_empty %>
-  <%# empty_address = Spree::Address.new%>
-  <% empty_address = Spree::Address.new country_id: Spree::Config.default_country_id%>
+  <% empty_address = Spree::Address.new%>
+  <%# empty_address = Spree::Address.new country_id: Spree::Config.default_country_id%>
   <% addresses     = secondry_addresses + [empty_address] %>
 <% else %>
    <% addresses     = secondry_addresses %>
