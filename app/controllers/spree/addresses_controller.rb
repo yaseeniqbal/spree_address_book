@@ -12,11 +12,19 @@ if defined?(Spree::Frontend)
 
     def create
       @address = spree_current_user.addresses.build(address_params)
-      @address.city = @address.suburb.name
-      @address.state_id = params[:address][:state_id]
-      state_name = Spree::State.find(@address.state_id).name
-      @address.state_name = state_name
+      if  (params[:address][:suburb_id].to_i > 0)
+        @address.city = @address.suburb.name
+      else
+        @address.text_suburb = params[:address][:text_suburb]
+      end
 
+      if (params[:address][:state_id].to_i > 0 )
+        @address.state_id = params[:address][:state_id]
+        state_name = Spree::State.find(@address.state_id).name
+        @address.state_name = state_name
+      else
+        @address.text_state = params[:address][:text_state]
+      end
     end
 
     def show
@@ -29,6 +37,17 @@ if defined?(Spree::Frontend)
 
     def new
       @address = Spree::Address.default
+    end
+
+
+    def shipping_calculator
+
+      @address_id = params[:shipping_address_id]
+
+      if spree_current_user.present?  && @address_id.present? 
+        shipping_address = spree_current_user.addresses.where(id: @address_id).last
+      end
+      Spree::Address.shipping_cost_calculation(shipping_address, current_order)
     end
 
     def update

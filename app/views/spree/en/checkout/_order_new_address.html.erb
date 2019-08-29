@@ -9,7 +9,7 @@
 
         <% address_form.object = Spree::Address.new %>
 
-        <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook="<%=address_type%>_inner">
+        <div data-hook="<%=address_type%>_inner">
           <% address_name = "#{address_type[0...4]}_address" %>
           <%= render partial: 'spree/en/checkout/single_address_form', locals: {
             :address_name => address_name,
@@ -22,6 +22,7 @@
         
         <div class="clearfix"></div>
         <div class="form-row">
+          <div class="">
           <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
             <div class="elit-dd text-center manag-input btn-full-wt"> 
               <button type="reset" class="ress-btn-delete cancle_<%= address_type %>_address_btn">CANCEL</button>
@@ -34,15 +35,18 @@
             </div>
           </div>
         </div>
+        </div>
       </div>
     <% end%>
 
 
 
   </div>
-  <div class="clearfix"></div>
-  <div class="dvd tab-mrg address-dvd"></div>
-  <div class="clearfix"></div>
+  <% if address_type == "shipping" %>
+    <div class="clearfix"></div>
+    <div class="dvd tab-mrg address-dvd"></div>
+    <div class="clearfix"></div>
+  <% end %>
 </div>
 
 <script type="text/javascript">

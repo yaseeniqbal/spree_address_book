@@ -1,3 +1,9 @@
+<style>
+  .help-block{
+    color: red;
+  }
+</style>
+
 <div class=" alert  alert-dismissible" id="address-info-sec"></div>
 <% @addresses = spree_current_user ? spree_current_user.addresses : [] %>
 
@@ -27,8 +33,6 @@
       </div>
     <% end %>
 
-
-
     <div class="nun-ut <%= (address_type == "billing") ? 'bill_address' : "ship_address"%>" style="<%= (address_type == "billing") ?  'display: none;' : "" %>">
 
       <% if address_type == "shipping" %>
@@ -38,20 +42,22 @@
       <% if @addresses.present? %>
 
         <% user = spree_current_user %>
-        <% user_shipping_address = user.present? && user.shipping_address.present? ? user.shipping_address.id  : "" %>
-        <% user_billing_address  = user.present? && user.billing_address.present? ?  user.billing_address.id: "" %>
-        <% primary_address     = @addresses.select{|s| ( user_shipping_address || user_billing_address  ) == s.id}.last%>
-        <% secondry_addresses  = @addresses.reject{|s| ( user_shipping_address || user_billing_address  ) == s.id} %>
-
-        <% if primary_address.present? %>
-          <% secondry_addresses.insert(0,primary_address) %>
-        <% end %>
+        <%# user_shipping_address = user.present? && user.shipping_address.present? ? user.shipping_address.id  : "" %>
+        <%# user_billing_address  = user.present? && user.billing_address.present? ?  user.billing_address.id: "" %>
+        <%# primary_address     = @addresses.select{|s| ( user_shipping_address || user_billing_address  ) == s.id}.last%>
+        <%# secondry_addresses  = @addresses.reject{|s| ( user_shipping_address || user_billing_address  ) == s.id} %>
+        <%# if primary_address.present? %>
+          <%# secondry_addresses.insert(0,primary_address) %>
+        <%# end %>
 
         <% if @addresses.last.persisted? %>
-          <% empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
-          <% addresses     = secondry_addresses + [empty_address] %>
+          <% empty_address = Spree::Address.new%>
+          <%# empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
+          <%# addresses     = secondry_addresses + [empty_address] %>
+          <% addresses     = @addresses + [empty_address] %>
         <% else %>
-           <% addresses     = secondry_addresses %>
+           <%# addresses     = secondry_addresses %>
+           <% addresses      = @addresses %>
         <% end %>
 
         <table class="table tower-table tower-table-f1 <%=address_type%>_address_table" id="<%= address_type %>" data-hook>
@@ -62,7 +68,8 @@
                   <% if address.persisted? %>
                     <td>
                       <span id="<%= [address_type, dom_id(address)].join('_') %>">
-                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id) %>
+                        <%# shipping_address = (current_order.present?  && current_order.shipping_address.present? )? current_order.shipping_address : addresses.first %>
+                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
                       </span>
                       <ul class="sin-st">
                         <li class="body3"><%= address.full_name%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>
@@ -84,8 +91,6 @@
             <% end %>
           </tbody>
         </table>
-
-
 
       <% else%>
 
@@ -116,7 +121,7 @@
                 <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
                   <div class="elit-dd text-center manag-input btn-full-wt">
                     <%#= address_form.submit "ADD ADDRESS",class: "ress-btn-save" %>
-                    <button class="ress-btn-save cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
+                    <button class="ress-btn-save  add_<%= address_type%>_default_address_btn cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
                   </div>
                 </div>
               </div>
@@ -124,16 +129,17 @@
             <% end %>
 
           </div>
-          <div class="clearfix"></div>
-          <div class="dvd tab-mrg address-dvd"></div>
-          <div class="clearfix"></div>
+          <% if address_type == "shipping" %>
+            <div class="clearfix"></div>
+            <div class="dvd tab-mrg address-dvd"></div>
+            <div class="clearfix"></div>
+          <% end %>
         </div>
       <% end%>
 
     </div>
 
     <div id="new-<%= address_type%>-address-form"> </div>
-
 
   <!--   <table class="table tower-table quz-1">
       <tbody>
@@ -177,4 +183,51 @@
 });
 </script>
  -->
+<script>
+  $(document).ready(function () {
 
+    function default_ship_address(address_id){
+        $('#order_ship_address_id_'+address_id).click();
+    }
+    function default_bill_address(address_id){
+        $('#order_bill_address_id_'+address_id).click()
+    }
+    let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
+
+    if(addr_id != ""){
+        default_ship_address(addr_id);
+        default_bill_address(addr_id);
+    }
+
+    function shipping_calculator_request(address_id){
+
+      $('.app-loader').show();
+      $.ajax({
+          type: "GET",
+          url: "/shipping_calculator",
+          data: {shipping_address_id: address_id},
+          dataType: 'script',
+          format: 'js',
+          success: function (response) {
+              // $("#loading-gif").addClass("hide");
+          },
+
+          error: function (request, status, error) {
+            $('.app-loader').hide();
+          }
+      });
+    }
+
+    let checked_shipping_address = $(".js-shipping-cost-address:checked");
+    if (checked_shipping_address.length == 1) {
+      let selected_adddress_id = $(".js-shipping-cost-address:checked").data("checkout-address-id");
+      shipping_calculator_request(selected_adddress_id)
+    } 
+
+    $(document).on("click", ".js-shipping-cost-address", function(e) {
+      let shipping_address_id = $(this).data("checkout-address-id");
+      shipping_calculator_request(shipping_address_id)
+
+    });
+  })
+</script>

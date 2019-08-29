@@ -2,88 +2,145 @@
 <% require_asset('spree/frontend/spree_auth') if (Object.const_get("Spree::User") rescue false) %>
 
 (function($) {
-  $(document).ready(function(){
+    $(document).ready(function(){
 
-    $('input#order_use_billing').click(function() {
-      if ($(this).is(':checked')) {
-        $(this).attr('checked', false);
-        $(this).val(0)
-      } else {
-        $(this).attr('checked', true);
-        $(this).val(1)
-      }
-      
+        $('input#order_use_billing').click(function() {
+            if ($(this).is(':checked')) {
+                $(this).attr('checked', false);
+                $(this).val(0)
+            } else {
+                $(this).attr('checked', true);
+                $(this).val(1)
+            }
+
+        });
+
+        $("input[name='order[bill_address_id]']:radio").change(function(){
+            if ($("input[name='order[bill_address_id]']:checked").val() != '0') {
+                $("input[name='order[bill_address_id]']").removeAttr("checked");
+                $(this).attr('checked', true);
+                console.log($(this).val());
+                show_address_form('billing');
+            } else {
+                hide_address_form('billing');
+            }
+        });
+
+        $("input[name='order[ship_address_id]']:radio").change(function(){
+            if ($("input[name='order[ship_address_id]']:checked").val() != '0') {
+                $("input[name='order[ship_address_id]']").removeAttr("checked");
+                $(this).attr('checked', true);
+                console.log($(this).val());
+                show_address_form('shipping');
+            } else {
+                hide_address_form('shipping');
+            }
+        });
     });
 
-    $("input[name='order[bill_address_id]']:radio").change(function(){
-      if ($("input[name='order[bill_address_id]']:checked").val() != '0') {
-          $("input[name='order[bill_address_id]']").removeAttr("checked");
-          $(this).attr('checked', true);
-          console.log($(this).val());
-        show_address_form('billing');
-      } else {
-        hide_address_form('billing');
-      }
-    });
+    function hide_address_form(address_type){
+        $("#" + address_type + " .inner").hide();
+        $("#" + address_type + " .inner input").prop("disabled", true);
+        $("#" + address_type + " .inner select").prop("disabled", true);
+    }
 
-    $("input[name='order[ship_address_id]']:radio").change(function(){
-      if ($("input[name='order[ship_address_id]']:checked").val() != '0') {
-          $("input[name='order[ship_address_id]']").removeAttr("checked");
-          $(this).attr('checked', true);
-          console.log($(this).val());
-        show_address_form('shipping');
-      } else {
-        hide_address_form('shipping');
-      }
-    });
-  });
-
-  function hide_address_form(address_type){
-    $("#" + address_type + " .inner").hide();
-    $("#" + address_type + " .inner input").prop("disabled", true);
-    $("#" + address_type + " .inner select").prop("disabled", true);
-  }
-
-  function show_address_form(address_type){
-    $("#" + address_type + " .inner").show();
-    $("#" + address_type + " .inner input").prop("disabled", false);
-    $("#" + address_type + " .inner select").prop("disabled", false);
-  }
+    function show_address_form(address_type){
+        $("#" + address_type + " .inner").show();
+        $("#" + address_type + " .inner input").prop("disabled", false);
+        $("#" + address_type + " .inner select").prop("disabled", false);
+    }
 })(jQuery);
 
 
 $(function(){
-  $(document).on("click", ".cart-new-address-btn", function(e) {
+    $(document).on("click", ".cart-new-address-btn", function(e) {
 
-    var address_type = $(this).attr("data-address-type");
-    let form = $('.new_' + address_type + '_address_form')
-    form.addClass("was-validated")
+        var address_type = $(this).attr("data-address-type");
+        let form = $('.new_' + address_type + '_address_form')
+        form.addClass("was-validated")
 
-    if (form[0].checkValidity() === false) {
-      event.preventDefault();
-      return false;
-    }
-    else
-    {
-      $('.app-loader').show();
-
-      $.ajax({
-        type: "POST",
-        url: "/addresses",
-        data: $('.new_' + address_type + '_address_form').serialize(),
-        dataType: 'script',
-        format: 'js',
-        success: function(response) {
-          $('.app-loader').hide();
-          $('#new-'+ address_type+ '-address-form').html("");
-          $('.' +address_type+'_address_table').show();
-        },
-        error: function(request, status, error) {
-          $('.app-loader').hide();
-          toastr.error("Some thing went wrong.Please  fill all the mandatory fields first.")
+        if (form[0].checkValidity() === false) {
+//            event.preventDefault();
+//            return false;
         }
-      });
-      event.preventDefault();
-    }
+        else
+        {
+            $('.app-loader').show();
+
+            $.ajax({
+                type: "POST",
+                url: "/addresses",
+                data: $('.new_' + address_type + '_address_form').serialize(),
+                dataType: 'script',
+                format: 'js',
+                success: function(response) {
+                    $('.app-loader').hide();
+                    $('#new-'+ address_type+ '-address-form').html("");
+                    $('.' +address_type+'_address_table').show();
+                },
+                error: function(request, status, error) {
+                    $('.app-loader').hide();
+                    toastr.error("Some thing went wrong.Please  fill all the mandatory fields first.")
+                }
+            });
+            event.preventDefault();
+        }
+    });
+
+    // International COUNTRY Drop Down Case
+    $(document).on("change", ".js-shipping-country-select-drop", function(e) {
+      let selectedVal = $(".js-shipping-country-select-drop option:selected").text();
+      if (selectedVal == "United Arab Emirates"){
+
+       $(".js-shipping-uae-state-sec").removeClass("hide");
+       $(".js-shipping-uae-suburb-sec").removeClass("hide");
+       $(".js-shipping-uae-state-field").attr("required", true);
+       $(".js-shipping-uae-suburb-field").attr("required", true);
+       $(".js-shipping-non-uae-state-sec").addClass("hide");
+       $(".js-shipping-non-uae-suburb-sec").addClass("hide");
+        $(".js-shipping-non-uae-state-field").removeAttr('required');
+       $(".js-shipping-non-uae-suburb-field").removeAttr('required');
+
+      }else{
+
+        $(".js-shipping-uae-state-sec").addClass("hide");
+        $(".js-shipping-uae-suburb-sec").addClass("hide");
+        $(".js-shipping-uae-state-field").removeAttr('required')
+        $(".js-shipping-uae-suburb-field").removeAttr('required')
+        $(".js-shipping-non-uae-state-sec").removeClass("hide");
+        $(".js-shipping-non-uae-suburb-sec").removeClass("hide");
+        $(".js-shipping-non-uae-state-field").attr("required", true);
+        $(".js-shipping-non-uae-suburb-field").attr("required", true);
+
+      }
+    });
+
+
+    $(document).on("change", ".js-billing-country-select-drop", function(e) {
+      let selectedVal = $(".js-billing-country-select-drop option:selected").text();
+      if (selectedVal == "United Arab Emirates"){
+
+        $(".js-billing-uae-state-sec").removeClass("hide");
+        $(".js-billing-uae-suburb-sec").removeClass("hide");
+        $(".js-billing-uae-state-field").attr("required", true);
+        $(".js-billing-uae-suburb-field").attr("required", true);
+        $(".js-billing-non-uae-state-sec").addClass("hide");
+        $(".js-billing-non-uae-suburb-sec").addClass("hide");
+        $(".js-billing-non-uae-state-field").removeAttr('required');
+        $(".js-billing-non-uae-suburb-field").removeAttr('required');
+
+
+
+      }else{
+        $(".js-billing-uae-state-sec").addClass("hide");
+        $(".js-billing-uae-suburb-sec").addClass("hide");
+        $(".js-billing-uae-state-field").removeAttr('required');
+        $(".js-billing-uae-suburb-field").removeAttr('required');
+        $(".js-billing-non-uae-state-sec").removeClass("hide");
+        $(".js-billing-non-uae-suburb-sec").removeClass("hide");
+        $(".js-billing-non-uae-state-field").attr("required", true);
+        $(".js-billing-non-uae-suburb-field").attr("required", true);
+      }
   });
+
 })
