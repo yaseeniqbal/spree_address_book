@@ -2,5 +2,5 @@
 var order_shipping_cost = "<%= j render partial:'spree/en/shared/order_shipping_cost', locals: {order: current_order} %>";
 $("#js-shipping-cost-sec").html(order_shipping_cost);
 $("#order_ship_address_id_" + "<%=@address_id%>").prop( "checked", true );
-$(".js-order-total").text("<%= Spree::Money.new(current_order.total, currency: current_order.currency).to_html %>")
+$(".js-order-total").text("<%= order.display_total.to_html %>")
 $('.app-loader').hide();
