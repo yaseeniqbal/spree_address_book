@@ -125,6 +125,8 @@ $(function(){
       let selectedVal = $(".js-shipping-country-select-drop option:selected").text();
       if (selectedVal == "United Arab Emirates"){
 
+
+       $('.js-new-shipping-uae-suburb-sec').removeClass('hide')
        $(".js-shipping-uae-state-sec").removeClass("hide");
        $(".js-shipping-uae-suburb-sec").removeClass("hide");
        $(".js-shipping-uae-state-field").attr("required", true);
@@ -136,6 +138,8 @@ $(function(){
 
       }else{
 
+        $('.js-langua-country-shipping').text('Please select your country')
+        $('.js-new-shipping-uae-suburb-sec').addClass('hide')
         $(".js-shipping-uae-state-sec").addClass("hide");
         $(".js-shipping-uae-suburb-sec").addClass("hide");
         $(".js-shipping-uae-state-field").removeAttr('required')
@@ -153,6 +157,7 @@ $(function(){
       let selectedVal = $(".js-billing-country-select-drop option:selected").text();
       if (selectedVal == "United Arab Emirates"){
 
+        $('.js-new-billing-uae-suburb-sec').removeClass('hide')
         $(".js-billing-uae-state-sec").removeClass("hide");
         $(".js-billing-uae-suburb-sec").removeClass("hide");
         $(".js-billing-uae-state-field").attr("required", true);
@@ -165,6 +170,8 @@ $(function(){
 
 
       }else{
+        $('.js-langua-country-billing').text('Please select your country')
+        $('.js-new-billing-uae-suburb-sec').addClass('hide')
         $(".js-billing-uae-state-sec").addClass("hide");
         $(".js-billing-uae-suburb-sec").addClass("hide");
         $(".js-billing-uae-state-field").removeAttr('required');
