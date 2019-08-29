@@ -90,7 +90,7 @@ $(function(){
     $(document).on('click', '.cart-new-address-btn, .js-address-drop-down, .js-address-city-drop-down', function () {
         if ($(this).data('address-type') == "shipping") {
             if ($('.js-langua-country-shipping').text() == "Please select your country") {
-                $('.js-shipping-country-error').parent().after('<small id="js-drop_down_error" class="help-block" style="">Please select your country</small>')
+                $('.js-shipping-country-error').children().find("div").after('<p id="js-drop_down_error" class="help-block" style="font-size: 10px">Please select your country</p>')
 
             }
             if ( !$('.js-shipping-uae-state-sec').hasClass('hide') && $('.js-langua-city-shipping').text() == "Please select your emirate") {
@@ -98,7 +98,7 @@ $(function(){
             }
         }else if ($(this).data('address-type') == "billing") {
             if ($('.js-langua-country-billing').text() == "Please select your country") {
-                $('.js-billing-country-error').parent().after('<small id="js-drop_down_billing_error" class="help-block" style="">Please select your country/state</small>')
+                $('.js-billing-country-error').children().find("div").after('<p id="js-drop_down_billing_error" class="help-block" style="font-size: 10px">Please select your country</p>')
             }
             if ( !$('.js-shipping-uae-state-sec').hasClass('hide') && $('.js-langua-city-billing').text() == "Please select your emirate") {
                 $('.js-billing-uae-state-sec-error').after('<p id="js-drop_state_down_error_billing" class="help-block" style="font-size: 10px">Please select your state/province</p>')
@@ -166,7 +166,7 @@ $(function(){
         $(".js-billing-non-uae-suburb-sec").addClass("hide");
         $(".js-billing-non-uae-state-field").removeAttr('required');
         $(".js-billing-non-uae-suburb-field").removeAttr('required');
-        $(".js-new-billing-uae-suburb-sec").removeAttr('required');
+          $(".js-new--uae-suburb-sec").removeAttr('required');
 
 
 
