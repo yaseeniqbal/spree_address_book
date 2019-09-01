@@ -36,7 +36,7 @@ if defined?(Spree::Frontend)
 
       @order.bill_address_id  = params[:order].present? ? params[:order][:bill_address_id].to_i : @order.bill_address.id
       @order.ship_address_id  = params[:order].present? ? params[:order][:ship_address_id].to_i : @order.ship_address.id
-      use_billing             = params[:order].present? ? params[:order][:use_billing] : ""
+      use_shipping             = params[:order].present? ? params[:order][:use_shipping] : ""
 
       bill_address            = @order.bill_address
       ship_address            = @order.ship_address
