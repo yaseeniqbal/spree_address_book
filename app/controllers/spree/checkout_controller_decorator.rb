@@ -5,7 +5,7 @@ if defined?(Spree::Frontend)
     after_action :normalize_addresses, :only => :update
     before_action :set_addresses, :only => :update
 
-  
+
     protected
 
     def set_addresses
@@ -36,12 +36,12 @@ if defined?(Spree::Frontend)
 
       @order.bill_address_id  = params[:order].present? ? params[:order][:bill_address_id].to_i : @order.bill_address.id
       @order.ship_address_id  = params[:order].present? ? params[:order][:ship_address_id].to_i : @order.ship_address.id
-      use_billing             = params[:order].present? ? params[:order][:use_billing] : "" 
+      use_billing             = params[:order].present? ? params[:order][:use_billing] : ""
 
       bill_address            = @order.bill_address
       ship_address            = @order.ship_address
 
-      if  (use_billing.present? || use_billing.to_i == 1)
+      if  (use_shipping.present? || use_shipping.to_i == 1)
         @order.update_column(:bill_address_id, ship_address.id)
         @order.update_column(:ship_address_id, ship_address.id)
       else
