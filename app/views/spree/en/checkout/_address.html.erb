@@ -1,5 +1,5 @@
 <style>
-  .help-block{
+  .help-block {
     color: red;
   }
 </style>
@@ -9,22 +9,25 @@
 
 <% @order = @order.present? ? @order : current_order %>
 
-<% ['shipping','billing'].each do |address_type|
+<% ['shipping', 'billing'].each do |address_type|
 
   next if address_type == 'billing' && Spree::AddressBook::Config[:disable_bill_address]
-  address_name = "#{address_type[0...4]}_address" %>
+  address_name = "#{address_type[0...4]}_address"   %>
 
 
   <div class="sip-box " data-hook="<%= address_type %>_fieldset_wrapper">
 
     <% if address_type == 'billing' && !Spree::AddressBook::Config[:disable_bill_address] %>
-      <div class="prime-tp-btn billing-add-sm" >
+      <div class="prime-tp-btn billing-add-sm">
         <ul>
 
           <li>Billing Address Same as Shipping Address</li>
           <li data-hook="use_billing">
-            <%= label_tag :order_use_billing, :id => 'shipp_address_check', class: "switch" do %>
-              <%= check_box_tag 'order[use_billing]', '1', checked: true%>
+          </li>
+
+          <li data-hook="use_shipping">
+            <%= label_tag :order_use_shipping, :id => 'shipp_address_check', class: "switch" do %>
+              <%= check_box_tag 'order[use_shipping]', '1', checked: true %>
               <span class="slider round"></span>
             <% end %>
 
@@ -33,7 +36,7 @@
       </div>
     <% end %>
 
-    <div class="nun-ut <%= (address_type == "billing") ? 'bill_address' : "ship_address"%>" style="<%= (address_type == "billing") ?  'display: none;' : "" %>">
+    <div class="nun-ut <%= (address_type == "billing") ? 'bill_address' : "ship_address" %>" style="<%= (address_type == "billing") ? 'display: none;' : "" %>">
 
       <% if address_type == "shipping" %>
         <h3 class="heading3 sip-title"><%= Spree.t(address_type + "_address").upcase %></h3>
@@ -47,66 +50,69 @@
         <%# primary_address     = @addresses.select{|s| ( user_shipping_address || user_billing_address  ) == s.id}.last%>
         <%# secondry_addresses  = @addresses.reject{|s| ( user_shipping_address || user_billing_address  ) == s.id} %>
         <%# if primary_address.present? %>
-          <%# secondry_addresses.insert(0,primary_address) %>
+        <%# secondry_addresses.insert(0,primary_address) %>
         <%# end %>
 
         <% if @addresses.last.persisted? %>
-          <% empty_address = Spree::Address.new%>
+          <% empty_address = Spree::Address.new %>
           <%# empty_address = Spree::Address.new country_id:Spree::Config.default_country_id%>
           <%# addresses     = secondry_addresses + [empty_address] %>
-          <% addresses     = @addresses + [empty_address] %>
+          <% addresses = @addresses + [empty_address] %>
         <% else %>
-           <%# addresses     = secondry_addresses %>
-           <% addresses      = @addresses %>
+          <%# addresses     = secondry_addresses %>
+          <% addresses = @addresses %>
         <% end %>
 
-        <table class="table tower-table tower-table-f1 <%=address_type%>_address_table" id="<%= address_type %>" data-hook>
+        <table class="table tower-table tower-table-f1 <%= address_type %>_address_table" id="<%= address_type %>" data-hook>
           <tbody>
-            <% addresses.in_groups_of(3).each  do |grouped_address_col| %>
-              <tr>
-                <% grouped_address_col.reject(&:nil?).each_with_index do |address, idx| %>
-                  <% if address.persisted? %>
-                    <td>
+          <% addresses.in_groups_of(3).each do |grouped_address_col| %>
+            <tr>
+              <% grouped_address_col.reject(&:nil?).each_with_index do |address, idx| %>
+                <% if address.persisted? %>
+                  <td>
                       <span id="<%= [address_type, dom_id(address)].join('_') %>">
                         <%# shipping_address = (current_order.present?  && current_order.shipping_address.present? )? current_order.shipping_address : addresses.first %>
                         <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
                       </span>
-                      <ul class="sin-st">
-                        <li class="body3"><%= address.full_name%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>
-                      </ul>
-                    </td>
-                  <% else %>
+                    <ul class="sin-st">
+                      <li class="body3"><%= address.full_name %></li>
+                      <li class="body2"><%= address.complete_address_info.html_safe %></li>
+                    </ul>
+                  </td>
+                <% else %>
 
-                    <td class="sip-adrs-btn manag-input">
-                      <!-- <button class="ress-btn-save <%=address_type%>_add_address_btn" id="cart-address-popup-opner">ADD ADDRESS</button> -->
-                      <br>
-                      <button type="button"  data-address-type= "<%=address_type%>" class="ress-btn-save add_<%= address_type%>_address_btn">ADD ADDRESS</button>
-                      <br>
-                      <br>
+                  <td class="sip-adrs-btn manag-input">
+                    <!-- <button class="ress-btn-save <%= address_type %>_add_address_btn" id="cart-address-popup-opner">ADD ADDRESS</button> -->
+                    <br>
+                    <button type="button" data-address-type="<%= address_type %>" class="ress-btn-save add_<%= address_type %>_address_btn">ADD
+                      ADDRESS
+                    </button>
+                    <br>
+                    <br>
 
-                    </td>
-                  <% end %>
+                  </td>
                 <% end %>
-              </tr>
-            <% end %>
+              <% end %>
+            </tr>
+          <% end %>
           </tbody>
         </table>
 
-      <% else%>
+      <% else %>
 
         <div class="sip-box new_<%= address_type %>_address">
           <div class="col-lg-12 col-md-12 col-sm-12 xp-1a">
 
             <form></form>
-            <%= form_for Spree::Address.new , html: { novalidate: true, class: "needs-validation news_frm manage-frm-box new_#{address_type}_address_form" } ,remote: true do |address_form| %>
+            <%= form_for Spree::Address.new, html: {novalidate: true, class: "needs-validation news_frm manage-frm-box new_#{address_type}_address_form"}, remote: true do |address_form| %>
 
               <% address_form.object = @order.ship_address %>
-              <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook=<%="#{address_type}_inner" %>>
+              <div class="form-row news_frm manage-frm-box manage-frm-box-final" data-hook=<%= "#{address_type}_inner" %>>
                 <%= render partial: 'spree/en/checkout/single_address_form', locals: {
-                  :address_name => address_name,
-                  :address_form => address_form,
-                  :address_type => address_type,
-                  :address      => Spree::Address.new
+                    :address_name => address_name,
+                    :address_form => address_form,
+                    :address_type => address_type,
+                    :address => Spree::Address.new
                 } %>
 
               </div>
@@ -121,7 +127,9 @@
                 <div class="col-md-6 col-lg-6 col-sm-6 mb-3">
                   <div class="elit-dd text-center manag-input btn-full-wt">
                     <%#= address_form.submit "ADD ADDRESS",class: "ress-btn-save" %>
-                    <button class="ress-btn-save  add_<%= address_type%>_default_address_btn cart-new-address-btn" data-address-type="<%= address_type %>">ADD ADDRESS</button>
+                    <button class="ress-btn-save  add_<%= address_type %>_default_address_btn cart-new-address-btn" data-address-type="<%= address_type %>">ADD
+                      ADDRESS
+                    </button>
                   </div>
                 </div>
               </div>
@@ -135,36 +143,19 @@
             <div class="clearfix"></div>
           <% end %>
         </div>
-      <% end%>
+      <% end %>
 
     </div>
 
-    <div id="new-<%= address_type%>-address-form"> </div>
-
-  <!--   <table class="table tower-table quz-1">
-      <tbody>
-        <tr>
-          <td>
-            <span><input type="radio" name = "ship_address"></span>
-            <ul class="sin-st"><li class="body3">Aya Barad</li><li class="body2">P.O. Box 9966<br>Al Qouz, Al Ain,<br>United Arab Emirates</li></ul>
-          </td>
-          <td class="sip-adrs-btn manag-input">
-            <button class = "ress-btn-save add_address_btn">ADD ADDRESS</button>
-          </td>
-          <td>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
-
+    <div id="new-<%= address_type %>-address-form"></div>
   </div>
 <% end %>
 <script>
-  $('.slider').click(function () {
-      if($('#order_use_billing').prop("checked") == false){
-          $('.cancle_billing_address_btn').click();
-    }
-  });
+    $('.slider').click(function () {
+        if ($('#order_use_billing').prop("checked") == false) {
+            $('.cancle_billing_address_btn').click();
+        }
+    });
 </script>
 
 <!-- <div class="well text-right form-buttons" data-hook="buttons">
@@ -184,50 +175,30 @@
 </script>
  -->
 <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
 
-    function default_ship_address(address_id){
-        $('#order_ship_address_id_'+address_id).click();
-    }
-    function default_bill_address(address_id){
-        $('#order_bill_address_id_'+address_id).click()
-    }
-    let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
+        function default_ship_address(address_id) {
+            $('#order_ship_address_id_' + address_id).click();
+        }
 
-    if(addr_id != ""){
-        default_ship_address(addr_id);
-        default_bill_address(addr_id);
-    }
+        function default_bill_address(address_id) {
+            $('#order_bill_address_id_' + address_id).click()
+        }
 
-    function shipping_calculator_request(address_id){
+        let addr_id = '<%=  @addresses.reject{|s| ( spree_current_user.shipping_address || spree_current_user.billing_address  ) == s.id}.first.try(:id)%>';
 
-      $('.app-loader').show();
-      $.ajax({
-          type: "GET",
-          url: "/shipping_calculator",
-          data: {shipping_address_id: address_id},
-          dataType: 'script',
-          format: 'js',
-          success: function (response) {
-              // $("#loading-gif").addClass("hide");
-          },
+        if (addr_id != "") {
+            default_ship_address(addr_id);
+            default_bill_address(addr_id);
+        }
 
-          error: function (request, status, error) {
-            $('.app-loader').hide();
-          }
-      });
-    }
 
-    let checked_shipping_address = $(".js-shipping-cost-address:checked");
-    if (checked_shipping_address.length == 1) {
-      let selected_adddress_id = $(".js-shipping-cost-address:checked").data("checkout-address-id");
-      shipping_calculator_request(selected_adddress_id)
-    } 
 
-    $(document).on("click", ".js-shipping-cost-address", function(e) {
-      let shipping_address_id = $(this).data("checkout-address-id");
-      shipping_calculator_request(shipping_address_id)
+        let checked_shipping_address = $(".js-shipping-cost-address:checked");
+        if (checked_shipping_address.length == 1) {
+            let selected_adddress_id = $(".js-shipping-cost-address:checked").data("checkout-address-id");
+            shipping_calculator_request(selected_adddress_id)
+        }
 
-    });
-  })
+    })
 </script>
