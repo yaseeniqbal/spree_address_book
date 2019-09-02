@@ -1,6 +1,7 @@
 <% lang = I18n.locale %>
 var order_shipping_cost = "<%= j render partial:'spree/en/shared/order_shipping_cost', locals: {order: current_order} %>";
 $("#js-shipping-cost-sec").html(order_shipping_cost);
+$('.form-box-delivery').html("<%= escape_javascript render(:partial => 'spree/en/checkout/form_wrapper', :locals => { order: current_order , :state=>'delivery'} ) %>");
 $("#order_ship_address_id_" + "<%=@address_id%>").prop( "checked", true );
 $(".js-order-total").text("<%= current_order.display_total.to_html %>")
 $('.app-loader').hide();

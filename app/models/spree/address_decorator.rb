@@ -27,8 +27,11 @@ Spree::Address.class_eval do
     begin
       if order.present? || order.shipping_address.present?
         order.shipping_address = address
-        order.create_proposed_shipments
-        order.update_with_updater!
+        if order.state != 'address'
+          order.update(state: "address")
+        end
+        order.next
+        order.update(state: "address")
       end
     rescue
     end

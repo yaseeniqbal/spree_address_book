@@ -196,8 +196,8 @@
 
         let checked_shipping_address = $(".js-shipping-cost-address:checked");
         if (checked_shipping_address.length == 1) {
-            let selected_adddress_id = $(".js-shipping-cost-address:checked").data("checkout-address-id");
-            shipping_calculator_request(selected_adddress_id)
+          let selected_adddress_id = $(".js-shipping-cost-address:checked").data("checkout-address-id");
+          shipping_calculator_request(selected_adddress_id)
         }
 
     })

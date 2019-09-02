@@ -3,23 +3,23 @@
 
 const shipping_calculator_request = (address_id) => {
     shouldGoToFoloosi = false;
-    checkoutTrigger();
-    // $('.app-loader').show();
-    //
-    // $.ajax({
-    //     type: "GET",
-    //     url: "/shipping_calculator",
-    //     data: {shipping_address_id: address_id},
-    //     dataType: 'script',
-    //     format: 'js',
-    //     success: function (response) {
-    //         // $("#loading-gif").addClass("hide");
-    //     },
-    //
-    //     error: function (request, status, error) {
-    //         $('.app-loader').hide();
-    //     }
-    // });
+    // checkoutTrigger();
+    $('.app-loader').show();
+    
+    $.ajax({
+        type: "GET",
+        url: "/shipping_calculator",
+        data: {shipping_address_id: address_id},
+        dataType: 'script',
+        format: 'js',
+        success: function (response) {
+            // $("#loading-gif").addClass("hide");
+        },
+    
+        error: function (request, status, error) {
+            $('.app-loader').hide();
+        }
+    });
 }
 
 (function($) {
@@ -47,11 +47,10 @@ const shipping_calculator_request = (address_id) => {
             }
         });
 
-        $("input[name='order[ship_address_id]']:radio").change(function(){
+        $(document).on("change", "input[name='order[ship_address_id]']:radio", function(e) {
             if ($("input[name='order[ship_address_id]']:checked").val() != '0') {
                 $("input[name='order[ship_address_id]']").removeAttr("checked");
                 $(this).attr('checked', true);
-                console.log($(this).val());
                 show_address_form('shipping');
                 let shipping_address_id = $(this).data("checkout-address-id");
                 shipping_calculator_request(shipping_address_id)
