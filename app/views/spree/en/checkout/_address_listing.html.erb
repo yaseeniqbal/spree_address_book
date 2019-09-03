@@ -30,7 +30,10 @@
 
             <td>
               <span id="<%= [address_type, dom_id(address)].join('_') %>">
-                <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id) %>
+
+                <% user = spree_current_user %>
+                <% checked_address = ( user.present? &&  user.ship_address.present?) ? user.ship_address :   addresses.first %>
+                <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == checked_address.id) %>
               </span>
               <ul class="sin-st">
                 <li class="body3"><%= address.try(:firstname).titleize%></li><li class="body2"><%= address.complete_address_info.html_safe %></li>

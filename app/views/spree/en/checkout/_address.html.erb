@@ -68,11 +68,14 @@
           <% addresses.in_groups_of(3).each do |grouped_address_col| %>
             <tr>
               <% grouped_address_col.reject(&:nil?).each_with_index do |address, idx| %>
+
                 <% if address.persisted? %>
                   <td>
                       <span id="<%= [address_type, dom_id(address)].join('_') %>">
                         <%# shipping_address = (current_order.present?  && current_order.shipping_address.present? )? current_order.shipping_address : addresses.first %>
-                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id == addresses.first.id), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
+                        <% user = spree_current_user %>
+                        <% checked_address = ( user.present? &&  user.ship_address.present?) ? user.ship_address :   addresses.first %>
+                        <%= form.radio_button "#{address_name}_id", address.id, :checked => (address.id ==  checked_address.id ), class: "#{address_type == "shipping" ? "js-shipping-cost-address" : ""}", data: {checkout_address_id: address.id} %>
                       </span>
                     <ul class="sin-st">
                       <li class="body3"><%= address.full_name %></li>
@@ -191,7 +194,6 @@
             default_ship_address(addr_id);
             default_bill_address(addr_id);
         }
-
 
 
         let checked_shipping_address = $(".js-shipping-cost-address:checked");
