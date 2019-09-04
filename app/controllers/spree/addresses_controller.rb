@@ -11,9 +11,7 @@ if defined?(Spree::Frontend)
     end
 
     def create
-
       @address = spree_current_user.addresses.build(address_params)
-
       if  (params[:address][:suburb_id].to_i > 0)
         @address.city = @address.suburb.name
       else
@@ -27,7 +25,6 @@ if defined?(Spree::Frontend)
       else
         @address.text_state = params[:address][:text_state]
       end
-
     end
 
     def show
@@ -42,14 +39,46 @@ if defined?(Spree::Frontend)
       @address = Spree::Address.default
     end
 
+
+    def shipping_calculator
+
+      @address_id = params[:shipping_address_id]
+
+      if spree_current_user.present?  && @address_id.present? 
+        shipping_address = spree_current_user.addresses.where(id: @address_id).last
+      end
+      Spree::Address.shipping_cost_calculation(shipping_address, current_order)
+    end
+
     def update
 
-      @address.state_id  = params[:address][:state_id]
-      city_name          = @address.state.suburbs.where(id: params[:address][:suburb_id]).last.name
-      @address.city      = city_name
-
       if @address.editable?
+        
+
+        if  (params[:address][:suburb_id].to_i > 0) && (params[:address][:text_suburb].blank?)
+          @address.suburb_id = params[:address][:suburb_id]
+          @address.city = @address.suburb.name
+          @address.text_suburb = ""
+        else
+          @address.text_suburb = params[:address][:text_suburb]
+          @address.city = ""
+          @address.suburb_id = nil
+        end
+
+        if (params[:address][:state_id].to_i > 0 )
+          @address.state_id = params[:address][:state_id]
+          state_name = Spree::State.find(@address.state_id).name
+          @address.state_name = state_name
+          @address.text_state = ""
+
+        else
+          @address.text_state = params[:address][:text_state]
+          @address.state_id      = nil
+          @address.state_name = ""
+        end
+
         @address_status = @address.update_attributes(address_params)
+
       else
         new_address = @address.clone
         new_address.attributes = address_params
