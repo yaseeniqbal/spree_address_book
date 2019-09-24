@@ -30,10 +30,11 @@ if defined?(Spree::Frontend)
 
     def normalize_addresses
 
-      return unless params[:state] == "address" && @order.bill_address_id && @order.ship_address_id
+      # return unless params[:state] == "address" && @order.bill_address_id && @order.ship_address_id
+      return unless params[:state] == "address"
       # ensure that there is no validation errors and addresses were saved
-      return unless @order.bill_address and @order.ship_address
-
+      # return unless @order.bill_address and @order.ship_address
+      
       @order.bill_address_id  = params[:order].present? ? params[:order][:bill_address_id].to_i : @order.bill_address.id
       @order.ship_address_id  = params[:order].present? ? params[:order][:ship_address_id].to_i : @order.ship_address.id
       use_shipping             = params[:order].present? ? params[:order][:use_shipping] : ""
